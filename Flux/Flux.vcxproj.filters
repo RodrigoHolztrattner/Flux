@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Flux.cpp" />
+    <ClCompile Include="BaseClass.cpp" />
+    <ClCompile Include="Node\FluxNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\FluxVariable.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\Holder\FluxHolder.cpp">
+      <Filter>Node\Holder</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\Holder\FluxNodeHolder.cpp">
+      <Filter>Node\Holder</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\FluxFunction.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="FluxUniqueIdentifierGenerator.cpp" />
+    <ClCompile Include="FluxUniqueIdentifier.cpp" />
+    <ClCompile Include="FluxProject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseClass.h" />
+    <ClInclude Include="FluxConfig.h" />
+    <ClInclude Include="Node\FluxNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\FluxVariable.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\Holder\FluxHolder.h">
+      <Filter>Node\Holder</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\Holder\FluxNodeHolder.h">
+      <Filter>Node\Holder</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\FluxFunction.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="FluxUniqueIdentifierGenerator.h" />
+    <ClInclude Include="FluxUniqueIdentifier.h" />
+    <ClInclude Include="FluxProject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Node">
+      <UniqueIdentifier>{24147f0b-c540-48c5-8f9f-8a5edb75f82a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node\Holder">
+      <UniqueIdentifier>{674c1816-4f5e-45ee-93b1-c7f39efe98f1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

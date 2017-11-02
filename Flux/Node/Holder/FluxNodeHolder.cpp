@@ -1,0 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+// Filename: FluxNodeHolder.cpp
+////////////////////////////////////////////////////////////////////////////////
+#include "FluxNodeHolder.h"
+
+Flux::FluxNodeHolder::FluxNodeHolder()
+{
+}
+
+Flux::FluxNodeHolder::FluxNodeHolder(const Flux::FluxNodeHolder& other)
+{
+}
+
+Flux::FluxNodeHolder::~FluxNodeHolder()
+{
+}
