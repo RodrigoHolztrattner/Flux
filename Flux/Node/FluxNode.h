@@ -41,6 +41,7 @@ public:
 		Structure,
 		Namespace,
 		Variable,
+		Function,
 		Project
 	};
 
@@ -75,10 +76,28 @@ public:
 
 public:
 
+	// Return our unique identifier
+	FluxUniqueIdentifier GetUniqueIdentifier();
+
+	// Return our type
+	Type GetType();
+
 protected:
 
-	// Signal that this node depends on the given one
-	bool CreateDependency(NodeInfo _nodeInfo);
+	// Signal that this node depends on the given one, if the other node should be deleted or modified it 
+	// should signal us about that
+	bool CreateDependencyFromUsToNodeInfo(NodeInfo _nodeInfo);
+
+	// Check if a node from the given type exist
+	bool NodeFromIdentifierOfTypeExist(FluxUniqueIdentifier _identifier, Type _type);
+
+	// Add a child node from the given identifier and type, also set the parent (we) and set the dependencies
+	void AddChildAndSetParentForNode(FluxUniqueIdentifier _identifier, Type _type);
+
+private:
+
+	// Set our parent
+	void SetParent(NodeInfo _parent);
 
 ///////////////
 // VARIABLES //

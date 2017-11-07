@@ -68,6 +68,12 @@ private: //////
 	// The function name
 	std::string m_FunctionName;
 
+	// If this is a member function
+	bool m_MemberFunction;
+
+	// If this is a member function, this is our class identifier
+	FluxUniqueIdentifier m_OwnerClassIdentifier;
+
 	// All input params
 	std::vector<FluxFunctionParam> m_InputParams;
 

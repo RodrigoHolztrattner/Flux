@@ -21,6 +21,15 @@
     <ClCompile Include="FluxUniqueIdentifierGenerator.cpp" />
     <ClCompile Include="FluxUniqueIdentifier.cpp" />
     <ClCompile Include="FluxProject.cpp" />
+    <ClCompile Include="Node\FluxClass.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\FunctionSource\FluxFunctionSource.cpp">
+      <Filter>Node\FunctionSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\FunctionSource\FluxFunctionSourceNode.cpp">
+      <Filter>Node\FunctionSource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
@@ -43,6 +52,15 @@
     <ClInclude Include="FluxUniqueIdentifierGenerator.h" />
     <ClInclude Include="FluxUniqueIdentifier.h" />
     <ClInclude Include="FluxProject.h" />
+    <ClInclude Include="Node\FluxClass.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\FunctionSource\FluxFunctionSource.h">
+      <Filter>Node\FunctionSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\FunctionSource\FluxFunctionSourceNode.h">
+      <Filter>Node\FunctionSource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Node">
@@ -50,6 +68,9 @@
     </Filter>
     <Filter Include="Node\Holder">
       <UniqueIdentifier>{674c1816-4f5e-45ee-93b1-c7f39efe98f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node\FunctionSource">
+      <UniqueIdentifier>{cf271fa4-9f2f-4d3d-b7e1-5e4deb7aa467}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

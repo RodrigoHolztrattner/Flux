@@ -39,15 +39,21 @@ public:
 
 public:
 
+	// Set the variable name
+	void SetName(std::string _name);
+
+	// Set the class identifier
+	void SetClassIdentifier(FluxUniqueIdentifier _classIdentifier);
+
 ///////////////
 // VARIABLES //
 private: //////
 
 	// The variable name
 	std::string m_VariableName;
-
-	// The variable type identifier
-	FluxUniqueIdentifier m_VariableTypeIdentifier;
+	
+	// The variable class identifier
+	FluxUniqueIdentifier m_VariableClassIdentifier;
 };
 
 // SmallPack

@@ -46,6 +46,9 @@ public:
 	// Return a node from the given node info
 	Flux::FluxNode* GetNodeFromInfo(Flux::FluxNode::NodeInfo _nodeInfo);
 
+	// Check if a node from the given info exist
+	bool NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo);
+
 ///////////////
 // VARIABLES //
 private: //////

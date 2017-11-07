@@ -43,3 +43,22 @@ Flux::FluxNode* Flux::FluxHolder::GetNodeFromInfo(Flux::FluxNode::NodeInfo _node
 	// Return the node object from the holder
 	return holder->GetNodeWithIdentifier(_nodeInfo.uniqueIdentifier);
 }
+
+bool  Flux::FluxHolder::NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo)
+{
+	// Get the holder from the info
+	Flux::FluxNodeHolder* holder = GetHolderFromType(_nodeInfo.type);
+	if (holder == nullptr)
+	{
+		// Invalid holder
+		return false;
+	}
+
+	// Check if the result node is valid
+	if (holder->GetNodeWithIdentifier(_nodeInfo.uniqueIdentifier) == nullptr)
+	{
+		return false;
+	}
+
+	return true;
+}
