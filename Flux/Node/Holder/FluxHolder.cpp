@@ -15,10 +15,10 @@ Flux::FluxHolder::~FluxHolder()
 {
 }
 
-Flux::FluxNodeHolder* Flux::FluxHolder::GetHolderFromType(Flux::FluxNode::Type _type)
+Flux::FluxNode* Flux::FluxHolder::GetNodeWithIdentifier(FluxUniqueIdentifier _identifier)
 {
 	// Check if the object exist
-	if (m_Holders.find(_type) == m_Holders.end())
+	if (m_Objects.find(_identifier) == m_Objects.end())
 	{
 		// Return a null ptr
 		return nullptr;
@@ -26,36 +26,30 @@ Flux::FluxNodeHolder* Flux::FluxHolder::GetHolderFromType(Flux::FluxNode::Type _
 	else
 	{
 		// Return the object
-		return m_Holders[_type];
+		return m_Objects[_identifier];
 	}
 }
 
-Flux::FluxNode* Flux::FluxHolder::GetNodeFromInfo(Flux::FluxNode::NodeInfo _nodeInfo)
+bool Flux::FluxHolder::InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqueIdentifier _identifier)
 {
-	// Get the holder from the info
-	Flux::FluxNodeHolder* holder = GetHolderFromType(_nodeInfo.type);
-	if (holder == nullptr)
+	// Check if the object exist
+	if (m_Objects.find(_identifier) != m_Objects.end())
 	{
-		// Invalid holder
-		return nullptr;
-	}
-
-	// Return the node object from the holder
-	return holder->GetNodeWithIdentifier(_nodeInfo.uniqueIdentifier);
-}
-
-bool  Flux::FluxHolder::NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo)
-{
-	// Get the holder from the info
-	Flux::FluxNodeHolder* holder = GetHolderFromType(_nodeInfo.type);
-	if (holder == nullptr)
-	{
-		// Invalid holder
+		// Return false because we already have an object with the same identifier
 		return false;
 	}
 
+	// Insert the object
+	m_Objects[_identifier] = _node;
+
+	return true;
+
+}
+
+bool Flux::FluxHolder::NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo)
+{
 	// Check if the result node is valid
-	if (holder->GetNodeWithIdentifier(_nodeInfo.uniqueIdentifier) == nullptr)
+	if (GetNodeWithIdentifier(_nodeInfo.uniqueIdentifier) == nullptr)
 	{
 		return false;
 	}

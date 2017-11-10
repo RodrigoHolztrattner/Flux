@@ -40,11 +40,11 @@ public:
 
 public:
 
-	// Return a holder from the given type
-	Flux::FluxNodeHolder* GetHolderFromType(Flux::FluxNode::Type _type);
+	// Return a object with the given identifier if it exist
+	Flux::FluxNode* GetNodeWithIdentifier(FluxUniqueIdentifier _identifier);
 
-	// Return a node from the given node info
-	Flux::FluxNode* GetNodeFromInfo(Flux::FluxNode::NodeInfo _nodeInfo);
+	// Insert a new object
+	bool InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqueIdentifier _identifier);
 
 	// Check if a node from the given info exist
 	bool NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo);
@@ -53,8 +53,8 @@ public:
 // VARIABLES //
 private: //////
 
-	// All holders
-	std::map<Flux::FluxNode::Type, Flux::FluxNodeHolder*> m_Holders;
+	// All objects
+	std::map<FluxUniqueIdentifier, Flux::FluxNode*> m_Objects;
 };
 
 // SmallPack

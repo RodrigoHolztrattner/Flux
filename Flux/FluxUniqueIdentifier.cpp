@@ -24,11 +24,12 @@ bool Flux::FluxUniqueIdentifier::Initialized()
 	return m_Initialized;
 }
 
-void Flux::FluxUniqueIdentifier::Initialize(std::string _projectName, uint32_t _identifier, Flux::FluxProject* _projectReference)
+void Flux::FluxUniqueIdentifier::Initialize(std::string _projectName, uint32_t _identifier, Type _type, Flux::FluxProject* _projectReference)
 {
 	// Set the data
 	m_ProjectName = _projectName;
 	m_Identifier = _identifier;
+	m_Type = _type;
 	m_ProjectReference = _projectReference;
 
 	// Set initialized to true

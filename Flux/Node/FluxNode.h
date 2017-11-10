@@ -33,30 +33,15 @@ class FluxNode
 {
 public:
 
-	// The node type
-	enum class Type
-	{
-		Unknow,
-		Class,
-		Structure,
-		Namespace,
-		Variable,
-		Function,
-		Project
-	};
-
 	// The node info type
 	struct NodeInfo
 	{
 		// A null constructor
-		NodeInfo() : type(Type::Unknow) {}
-		NodeInfo(FluxUniqueIdentifier _identifier, Type _type) : uniqueIdentifier(_identifier), type(_type) {}
+		NodeInfo() {}
+		NodeInfo(FluxUniqueIdentifier _identifier) : uniqueIdentifier(_identifier) {}
 
 		// The unique identifier
 		FluxUniqueIdentifier uniqueIdentifier;
-
-		// The type
-		Type type;
 	};
 
 	// The node dependency type
@@ -79,20 +64,13 @@ public:
 	// Return our unique identifier
 	FluxUniqueIdentifier GetUniqueIdentifier();
 
-	// Return our type
-	Type GetType();
-
 protected:
 
-	// Signal that this node depends on the given one, if the other node should be deleted or modified it 
-	// should signal us about that
-	bool CreateDependencyFromUsToNodeInfo(NodeInfo _nodeInfo);
-
 	// Check if a node from the given type exist
-	bool NodeFromIdentifierOfTypeExist(FluxUniqueIdentifier _identifier, Type _type);
+	bool NodeFromIdentifierOfTypeExist(FluxUniqueIdentifier _identifier);
 
 	// Add a child node from the given identifier and type, also set the parent (we) and set the dependencies
-	void AddChildAndSetParentForNode(FluxUniqueIdentifier _identifier, Type _type);
+	void AddChildAndSetParentForNode(FluxUniqueIdentifier _identifier);
 
 private:
 
@@ -102,9 +80,6 @@ private:
 ///////////////
 // VARIABLES //
 private: //////
-
-	// The type
-	Type m_Type;
 
 	// Our unique identifier
 	FluxUniqueIdentifier m_UniqueIdentifier;
@@ -117,9 +92,6 @@ private: //////
 
 	// All children node info
 	std::vector<NodeInfo> m_ChildrenInfo;
-
-	// All nodes that reference this one in some way
-	std::vector<NodeDependencyType> m_ReferencedNodeInfo;
 };
 
 // SmallPack

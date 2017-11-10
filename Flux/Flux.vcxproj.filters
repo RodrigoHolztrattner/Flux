@@ -12,9 +12,6 @@
     <ClCompile Include="Node\Holder\FluxHolder.cpp">
       <Filter>Node\Holder</Filter>
     </ClCompile>
-    <ClCompile Include="Node\Holder\FluxNodeHolder.cpp">
-      <Filter>Node\Holder</Filter>
-    </ClCompile>
     <ClCompile Include="Node\FluxFunction.cpp">
       <Filter>Node</Filter>
     </ClCompile>
@@ -30,6 +27,12 @@
     <ClCompile Include="Node\FunctionSource\FluxFunctionSourceNode.cpp">
       <Filter>Node\FunctionSource</Filter>
     </ClCompile>
+    <ClCompile Include="Node\Dependency\FluxDependency.cpp">
+      <Filter>Node\Dependency</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\Dependency\FluxDependencyManager.cpp">
+      <Filter>Node\Dependency</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
@@ -41,9 +44,6 @@
       <Filter>Node</Filter>
     </ClInclude>
     <ClInclude Include="Node\Holder\FluxHolder.h">
-      <Filter>Node\Holder</Filter>
-    </ClInclude>
-    <ClInclude Include="Node\Holder\FluxNodeHolder.h">
       <Filter>Node\Holder</Filter>
     </ClInclude>
     <ClInclude Include="Node\FluxFunction.h">
@@ -61,6 +61,12 @@
     <ClInclude Include="Node\FunctionSource\FluxFunctionSourceNode.h">
       <Filter>Node\FunctionSource</Filter>
     </ClInclude>
+    <ClInclude Include="Node\Dependency\FluxDependency.h">
+      <Filter>Node\Dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\Dependency\FluxDependencyManager.h">
+      <Filter>Node\Dependency</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Node">
@@ -71,6 +77,9 @@
     </Filter>
     <Filter Include="Node\FunctionSource">
       <UniqueIdentifier>{cf271fa4-9f2f-4d3d-b7e1-5e4deb7aa467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node\Dependency">
+      <UniqueIdentifier>{69342598-a11c-4f05-a1eb-7133e073a316}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
