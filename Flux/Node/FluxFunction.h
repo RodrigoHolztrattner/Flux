@@ -46,14 +46,13 @@ class FluxFunction : public FluxNode
 public:
 
 public:
-	FluxFunction();
-	FluxFunction(const FluxFunction&);
+	FluxFunction(FluxProject* _project);
 	~FluxFunction();
 
 public:
 
-	// Set the function name
-	void SetName(std::string _name);
+	// Add a local variable
+	void AddLocalVariable(FluxUniqueIdentifier _variableIdentifier);
 
 	// Add an input param
 	void AddInputParam(FluxUniqueIdentifier _classIdentifier, std::string _name);
@@ -65,14 +64,8 @@ public:
 // VARIABLES //
 private: //////
 
-	// The function name
-	std::string m_FunctionName;
-
-	// If this is a member function
-	bool m_MemberFunction;
-
-	// If this is a member function, this is our class identifier
-	FluxUniqueIdentifier m_OwnerClassIdentifier;
+	// All the local variables
+	std::vector<FluxUniqueIdentifier> m_LocalVariables;
 
 	// All input params
 	std::vector<FluxFunctionParam> m_InputParams;

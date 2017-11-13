@@ -7,6 +7,7 @@
 // INCLUDES //
 //////////////
 #include "FluxConfig.h"
+#include "FluxUniqueIdentifier.h"
 #include <string>
 
 /////////////
@@ -29,23 +30,50 @@ FluxNamespaceBegin(Flux)
 ////////////////////////////////////////////////////////////////////////////////
 class FluxProject
 {
+private:
+
+	// The project file extension we are going to use
+	const std::string ProjectFileExtension = ".info";
+
 public:
 	FluxProject();
 	FluxProject(const FluxProject&);
 	~FluxProject();
 
-	// Return the project name
-	std::string GetProjectName();
+	// Set the project external name
+	void SetExternalProjectName(std::string _projectName);
+
+	// Return the project external name
+	std::string GetExternalProjectName();
+
+	// Return the project internal name
+	std::string GetInternalProjectName();
+
+public:
+
+	// Save the project info
+	void SaveProjectInfo();
+
+	// Load the project info
+	void LoadProjectInfo(std::string _projectName);
+
+	// Generate a unique identifier for the given type
+	FluxUniqueIdentifier GenerateUniqueIdentifier(Type _identifierType);
 
 private:
-
 
 ///////////////
 // VARIABLES //
 private: //////
 
-	// The project name
-	std::string m_ProjectName;
+	// The project external name
+	std::string m_ProjectExternalName;
+
+	// The project internal name (when set, this will never change)
+	std::string m_ProjectInternalName;
+
+	// The project unique identifier number
+	uint32_t m_UniqueIdentifierNumber;
 };
 
 // SmallPack

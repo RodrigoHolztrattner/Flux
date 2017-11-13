@@ -2,49 +2,43 @@
 // Filename: FluxClass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "FluxClass.h"
+#include "Holder\FluxHolder.h"
+#include "Dependency\FluxDependencyManager.h"
 
-Flux::FluxClass::FluxClass()
+Flux::FluxClass::FluxClass(FluxProject* _project) : FluxNode(_project, _project->GenerateUniqueIdentifier(Type::Class))
 {
 	// Set the initial data
 	// ...
-}
-
-Flux::FluxClass::FluxClass(const Flux::FluxClass& other)
-{
 }
 
 Flux::FluxClass::~FluxClass()
 {
 }
 
-void Flux::FluxClass::SetName(std::string _name)
-{
-	// Set the class name
-	m_ClassName = _name;
-}
-
-// Add a member variable
 void Flux::FluxClass::AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier)
 {
+	// Get the dependency manager and the holder instances
+	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
+	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
+
 	// Check if the identifier is valid
-	if (!NodeFromIdentifierOfTypeExist(_identifier, Type::Variable))
+	if (!NodeFromIdentifierExist(_identifier))
 	{
 		// Invalid identifier
 		return;
 	}
 
 	// Create the dependency
-	if (!CreateDependency(Flux::FluxNode::NodeInfo(_identifier, Type::Variable)))
-	{
-		// We failed at creating the dependency
-		return;
-	}
+	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _identifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the member variable
 	FluxMemberVariable memberVariable;
 	memberVariable.variableIdentifier = _identifier;
 	memberVariable.variableAccessModifier = _accessModifier;
-	memberVariable.internalIdentifier = 0; // TODO
+	memberVariable.internalIdentifier = GetUniqueInternalNumber();
+
+	// Set the parent for the new variable
+	fluxHolderInstance->GetNodeWithIdentifier(_identifier)->SetParent(GetUniqueIdentifier());
 
 	// Add the member variable
 	m_MemberVariables.push_back(memberVariable);
@@ -52,25 +46,28 @@ void Flux::FluxClass::AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAc
 
 void Flux::FluxClass::AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier)
 {
+	// Get the dependency manager and the holder instances
+	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
+	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
+
 	// Check if the identifier is valid
-	if (!NodeFromIdentifierOfTypeExist(_identifier, Type::Function))
+	if (!NodeFromIdentifierExist(_identifier))
 	{
 		// Invalid identifier
 		return;
 	}
 
 	// Create the dependency
-	if (!CreateDependency(Flux::FluxNode::NodeInfo(_identifier, Type::Function)))
-	{
-		// We failed at creating the dependency
-		return;
-	}
+	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _identifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the member function
 	FluxMemberFunction memberFunction;
 	memberFunction.functionIdentifier = _identifier;
 	memberFunction.functionAccessModifier = _accessModifier;
-	memberFunction.internalIdentifier = 0; // TODO
+	memberFunction.internalIdentifier = GetUniqueInternalNumber();
+
+	// Set the parent for the new variable
+	fluxHolderInstance->GetNodeWithIdentifier(_identifier)->SetParent(GetUniqueIdentifier());
 
 	// Add the member function
 	m_MemberFunctions.push_back(memberFunction);

@@ -51,6 +51,11 @@ void Flux::FluxDependencyManager::AddDependencyRelation(Flux::FluxUniqueIdentifi
 	}
 }
 
+void Flux::FluxDependencyManager::RemoveDependencyRelation(Flux::FluxUniqueIdentifier _sourceIdentifier, Flux::FluxUniqueIdentifier _destinationIdentifier, FluxDependencyRelationType _relation)
+{
+	// TODO
+}
+
 Flux::FluxDependency* Flux::FluxDependencyManager::GetIdentifierDependencies(const Flux::FluxUniqueIdentifier& _identifier, bool _create)
 {
 	// Check if we have a dependency object for the given identifier
@@ -64,7 +69,7 @@ Flux::FluxDependency* Flux::FluxDependencyManager::GetIdentifierDependencies(con
 	if (_create)
 	{
 		// Create the new dependency object
-		Flux::FluxDependency* newDependencyObject = new Flux::FluxDependency();
+		Flux::FluxDependency* newDependencyObject = new Flux::FluxDependency(_identifier);
 
 		// Insert it into our map
 		m_DependencyObjects.insert(std::pair<FluxUniqueIdentifier, Flux::FluxDependency*>(_identifier, newDependencyObject));
@@ -88,4 +93,17 @@ bool Flux::FluxDependencyManager::CreateDependency(const Flux::FluxUniqueIdentif
 	dependencies->InsertDependency(_sourceIdentifier);
 
 	return true;
+}
+
+void Flux::FluxDependencyManager::NotifyDependencies(Flux::FluxUniqueIdentifier _identifier, FluxDependencyNotifyType _notifyType)
+{
+	// Get the dependencies for the identifier
+	Flux::FluxDependency* dependencies = GetIdentifierDependencies(_identifier);
+	if (dependencies == nullptr)
+	{
+		return;
+	}
+
+	// Notify the dependencies
+	dependencies->NotifyDependencies(_notifyType);
 }

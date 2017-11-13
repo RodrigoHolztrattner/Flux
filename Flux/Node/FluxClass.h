@@ -67,14 +67,10 @@ class FluxClass : public FluxNode
 public:
 
 public:
-	FluxClass();
-	FluxClass(const FluxClass&);
+	FluxClass(FluxProject* _project);
 	~FluxClass();
 
 public:
-
-	// Set the function name
-	void SetName(std::string _name);
 
 	// Add a member variable
 	void AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier);
@@ -85,9 +81,6 @@ public:
 ///////////////
 // VARIABLES //
 private: //////
-
-	// The class name
-	std::string m_ClassName;
 
 	// All member variables
 	std::vector<FluxMemberVariable> m_MemberVariables;

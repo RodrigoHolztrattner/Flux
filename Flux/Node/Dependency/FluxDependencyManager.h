@@ -26,14 +26,6 @@
 
 // SmallPack
 FluxNamespaceBegin(Flux)
-
-// The dependency relation types
-enum class FluxDependencyRelationType
-{
-	SrcDependsOnDst,
-	DstDependsOnSrc,
-	BothDependsOnEachOther
-};
 	
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: FluxDependencyManager
@@ -50,8 +42,11 @@ public:
 	// Add dependency relation
 	void AddDependencyRelation(Flux::FluxUniqueIdentifier _sourceIdentifier, Flux::FluxUniqueIdentifier _destinationIdentifier, FluxDependencyRelationType _relation);
 
+	// Remove a dependency 
+	void RemoveDependencyRelation(Flux::FluxUniqueIdentifier _sourceIdentifier, Flux::FluxUniqueIdentifier _destinationIdentifier, FluxDependencyRelationType _relation);
+
 	// Notify all dependencies that the given identifier have
-	void NotifyDependencies(Flux::FluxUniqueIdentifier _identifier);
+	void NotifyDependencies(Flux::FluxUniqueIdentifier _identifier, FluxDependencyNotifyType _notifyType);
 
 	// 
 

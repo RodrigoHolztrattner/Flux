@@ -29,5 +29,5 @@ void Flux::FluxFunctionSourceNode::SetType(FluxFunctionSourceNodeType _type)
 
 void Flux::FluxFunctionSourceNode::SetUniqueIdentifierReference(FluxUniqueIdentifier _uniqueIdentifier)
 {
-	m_InternalIndexIdentifier = _uniqueIdentifier;
+	m_IdentifierReference = _uniqueIdentifier;
 }

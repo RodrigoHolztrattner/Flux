@@ -39,9 +39,49 @@ struct SomeData
 };
 
 #include "FluxUniqueIdentifier.h"
+#include "FluxProject.h"
+#include "Node\FluxClass.h"
+#include "Node\FluxFunction.h"
+#include "Node\FluxVariable.h"
 
 int main()
 {
+	// PROJECT //
+
+	// Create a new project
+	Flux::FluxProject newproject;
+
+	// Try to load an old info
+	newproject.LoadProjectInfo("Neverland");
+
+	// Set the project data
+	newproject.SetExternalProjectName("Neverland");
+
+	// CLASS //
+
+	// Create a new class
+	Flux::FluxClass newClass(&newproject);
+
+	// Set the class data
+	newClass.SetExternalName("DummyClass");
+
+	// VARIABLE //
+
+	// Create a new variable
+	Flux::FluxVariable newVariable(&newproject);
+
+	// Set the variable data
+	newVariable.SetExternalName("DummyVariable");
+	newVariable.SetVariableType(newClass);
+
+	// Add a member variable to our class
+	newClass.AddMemberVariable(newVariable, Flux::FluxAccessModifier::Private);
+
+	// // //
+
+	// Save the current project
+	newproject.SaveProjectInfo();
+
 	/*
 	std::ofstream os("out.cereal", std::ios::binary);
 	cereal::BinaryOutputArchive archive(os);
@@ -51,8 +91,8 @@ int main()
 	*/
 
 	Flux::GlobalInstance<Flux::FluxUniqueIdentifier> identifier;
-	int a = identifier->GetUniqueIdentifier();
-	std::cout << a << std::endl;
+	// int a = identifier->GetUniqueIdentifier();
+	// std::cout << a << std::endl;
 	return 0;
 }
 

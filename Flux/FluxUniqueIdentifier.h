@@ -7,9 +7,9 @@
 // INCLUDES //
 //////////////
 #include "FluxConfig.h"
-#include "FluxProject.h"
 #include <cstdint>
 #include <string>
+
 /////////////
 // DEFINES //
 /////////////
@@ -28,6 +28,9 @@
 // SmallPack
 FluxNamespaceBegin(Flux)
 
+// We know the FluxProject class
+class FluxProject;
+
 // The type
 enum class Type
 {
@@ -45,6 +48,11 @@ enum class Type
 ////////////////////////////////////////////////////////////////////////////////
 class FluxUniqueIdentifier
 {
+private:
+
+	// The FluxProject is a friend class
+	friend FluxProject;
+
 public:
 	FluxUniqueIdentifier();
 	FluxUniqueIdentifier(const FluxUniqueIdentifier&);
@@ -59,7 +67,7 @@ public:
 		int stringNameCompare = m_ProjectName.compare(rhs.m_ProjectName);
 
 		if (stringNameCompare != 0)						// Check project name first
-			return stringNameCompare;
+			return stringNameCompare != 0;
 		else if (m_Type != rhs.m_Type)					// Ok same project. Compare the type
 			return m_Type < rhs.m_Type;
 		else

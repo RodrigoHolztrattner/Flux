@@ -8,6 +8,7 @@
 //////////////
 #include "..\..\FluxConfig.h"
 #include "..\..\FluxUniqueIdentifier.h"
+#include "FluxDependencyInterface.h"
 #include "..\FluxNode.h"
 #include <map>
 
@@ -50,6 +51,7 @@ public:
 	// The dependency type
 	struct DependencyType
 	{
+		DependencyType() {}
 		DependencyType(FluxUniqueIdentifier _identifier) : uniqueIdentifier(_identifier) {}
 
 		// The unique identifier
@@ -60,7 +62,7 @@ public:
 	};
 
 public:
-	FluxDependency();
+	FluxDependency(FluxUniqueIdentifier _ownerIdentifier);
 	FluxDependency(const FluxDependency&);
 	~FluxDependency();
 
@@ -69,6 +71,9 @@ public:
 
 	// Remove a dependency
 	void RemoveDependency(const FluxUniqueIdentifier& _identifier);
+
+	// Notify all dependencies
+	void NotifyDependencies(FluxDependencyNotifyType _notifyType);
 
 private:
 

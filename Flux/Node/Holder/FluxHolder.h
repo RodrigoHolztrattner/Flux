@@ -7,7 +7,6 @@
 // INCLUDES //
 //////////////
 #include "..\..\FluxConfig.h"
-#include "FluxNodeHolder.h"
 #include "..\FluxNode.h"
 #include <map>
 
@@ -47,7 +46,7 @@ public:
 	bool InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqueIdentifier _identifier);
 
 	// Check if a node from the given info exist
-	bool NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo);
+	bool NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _identifier);
 
 ///////////////
 // VARIABLES //

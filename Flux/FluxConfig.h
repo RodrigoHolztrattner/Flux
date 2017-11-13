@@ -17,7 +17,7 @@
 FluxNamespaceBegin(Flux)
 
 inline unsigned int SetFlag(unsigned int _val, unsigned int _flag) { return _val | _flag; }
-inline bool CheckFlag(unsigned int _val, unsigned int _flag) { return (_val & _flag); }
+inline bool CheckFlag(unsigned int _val, unsigned int _flag) { return (_val & _flag) != 0; }
 
 inline unsigned int pow2roundup(unsigned int x)
 {

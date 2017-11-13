@@ -33,27 +33,23 @@ class FluxVariable : public FluxNode
 public:
 
 public:
-	FluxVariable();
-	FluxVariable(const FluxVariable&);
+	FluxVariable(FluxProject* _project);
 	~FluxVariable();
 
 public:
 
-	// Set the variable name
-	void SetName(std::string _name);
+	// Set the variable type
+	void SetVariableType(FluxUniqueIdentifier _classIdentifier);
 
-	// Set the class identifier
-	void SetClassIdentifier(FluxUniqueIdentifier _classIdentifier);
+	// Return the variable type
+	FluxUniqueIdentifier GetVariableType();
 
 ///////////////
 // VARIABLES //
 private: //////
 
-	// The variable name
-	std::string m_VariableName;
-	
-	// The variable class identifier
-	FluxUniqueIdentifier m_VariableClassIdentifier;
+	// Our variable class type
+	FluxUniqueIdentifier m_VariableType;
 };
 
 // SmallPack

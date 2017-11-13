@@ -6,16 +6,20 @@
 #include "Holder\FluxHolder.h"
 #include "Dependency\FluxDependencyManager.h"
 
-Flux::FluxNode::FluxNode()
+Flux::FluxNode::FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIdentifier)
 {
-	// Get the unique identifier object instance
-	// Flux::GlobalInstance<Flux::FluxUniqueIdentifier> g_UniqueIdentifierInstance;
-
-	// Get a unique identifier
-	// m_UniqueIdentifier = g_UniqueIdentifierInstance->GetUniqueIdentifier();
+	// Get the holder instance
+	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
 
 	// Set the initial data
-	// ...
+	m_UniqueIdentifier = _uniqueIdentifier;
+	m_Verified = false;
+	m_MemberFromClass = false;
+	m_ExternalName = "dummy";
+	m_InternalIndexNumber = 0;
+
+	// Add this node
+	fluxHolderInstance->InsertNodeWithIdentifier(this, _uniqueIdentifier);
 }
 
 Flux::FluxNode::FluxNode(const Flux::FluxNode& other)
@@ -26,64 +30,62 @@ Flux::FluxNode::~FluxNode()
 {
 }
 
+void Flux::FluxNode::SetExternalName(std::string _name)
+{
+	// Set the external name
+	m_ExternalName = _name;
+}
+
 Flux::FluxUniqueIdentifier Flux::FluxNode::GetUniqueIdentifier()
 {
 	return m_UniqueIdentifier;
 }
 
-bool Flux::FluxNode::NodeFromIdentifierOfTypeExist(FluxUniqueIdentifier _identifier)
+bool Flux::FluxNode::NodeFromIdentifierExist(FluxUniqueIdentifier _identifier)
 {
 	// Get the holder instance
 	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
 
-	// Set the node info
-	NodeInfo nodeInfo;
-	nodeInfo.uniqueIdentifier = _identifier;
-
 	// Check
-	return fluxHolderInstance->NodeFromInfoExist(nodeInfo);
+	return fluxHolderInstance->NodeFromIdentifierExist(_identifier);
 }
 
-void Flux::FluxNode::AddChildAndSetParentForNode(FluxUniqueIdentifier _identifier)
+void Flux::FluxNode::SetParent(FluxUniqueIdentifier _parent)
 {
-	// Get the global holder instance and the dependency manager one
-	Flux::GlobalInstance<Flux::FluxHolder> holderInstance;
+	// Get the dependency manager instance
 	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
 
-	// Get the node
-	Flux::FluxNode* childNode = holderInstance->GetNodeWithIdentifier(_identifier);
-	if (childNode == nullptr)
+	// Check if we should remove an old relation
+	if (m_ParentNode.Initialized())
 	{
-		// Invalid node
-		return;
+		// Remove this relation
+		dependencyManagerInstance->RemoveDependencyRelation(GetUniqueIdentifier(), m_ParentNode, FluxDependencyRelationType::SrcDependsOnDst);
 	}
 
 	// Create the mutual dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _identifier, FluxDependencyRelationType::BothDependsOnEachOther);
+	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _parent, FluxDependencyRelationType::SrcDependsOnDst);
 
-	isso de parent e filho precisa ver se esta certo
-		tem que ver o que um nodo pode ter como filho
-		e SE ele deve ter filho ou deve buscar na array global
+	// Check if the parent is a class
+	// If true, set that we are a member TODO
+	
+	// Set the parent
+	m_ParentNode = _parent;
 
-		preciso ver como funciona a parte de notify nas dependencies e quando devemos deletar uma
-
-	// Prepare the child info
-	NodeInfo childInfo;
-	childInfo.uniqueIdentifier = _identifier;
-
-	// Add the child
-	m_ChildrenInfo.push_back(childInfo);
-
-	// Prepare the parent info
-	NodeInfo parentInfo;
-	parentInfo.uniqueIdentifier = GetUniqueIdentifier();
-
-	// Set the parent for the child node
-	childNode->SetParent(parentInfo);
+	// Notify all dependencies (signature changed)
+	dependencyManagerInstance->NotifyDependencies(GetUniqueIdentifier(), FluxDependencyNotifyType::SignatureChanged);
 }
 
-void Flux::FluxNode::SetParent(NodeInfo _parent)
+bool Flux::FluxNode::IsVerified()
 {
-	// Set the parent
-	m_ParentInfo = _parent;
+	return m_Verified;
+}
+
+void Flux::FluxNode::Invalidate()
+{
+	m_Verified = false;
+}
+
+uint32_t Flux::FluxNode::GetUniqueInternalNumber()
+{
+	return m_InternalIndexNumber++;
 }

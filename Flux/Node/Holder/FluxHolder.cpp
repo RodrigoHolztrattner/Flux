@@ -46,10 +46,10 @@ bool Flux::FluxHolder::InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqu
 
 }
 
-bool Flux::FluxHolder::NodeFromInfoExist(Flux::FluxNode::NodeInfo _nodeInfo)
+bool Flux::FluxHolder::NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _identifier)
 {
 	// Check if the result node is valid
-	if (GetNodeWithIdentifier(_nodeInfo.uniqueIdentifier) == nullptr)
+	if (GetNodeWithIdentifier(_identifier) == nullptr)
 	{
 		return false;
 	}

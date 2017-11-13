@@ -2,48 +2,62 @@
 // Filename: FluxFunction.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "FluxFunction.h"
+#include "Holder\FluxHolder.h"
+#include "Dependency\FluxDependencyManager.h"
 
-Flux::FluxFunction::FluxFunction()
+Flux::FluxFunction::FluxFunction(FluxProject* _project) : FluxNode(_project, _project->GenerateUniqueIdentifier(Type::Function))
 {
 	// Set the initial data
 	// ...
-}
-
-Flux::FluxFunction::FluxFunction(const Flux::FluxFunction& other)
-{
 }
 
 Flux::FluxFunction::~FluxFunction()
 {
 }
 
-void Flux::FluxFunction::SetName(std::string _name)
+void Flux::FluxFunction::AddLocalVariable(FluxUniqueIdentifier _variableIdentifier)
 {
-	// Set the function name
-	m_FunctionName = _name;
-}
+	// Get the dependency manager and the holder instances
+	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
+	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
 
-void Flux::FluxFunction::AddInputParam(FluxUniqueIdentifier _classIdentifier, std::string _name)
-{
 	// Check if the identifier is valid
-	if (!NodeFromIdentifierOfTypeExist(_classIdentifier, Type::Class))
+	if (!NodeFromIdentifierExist(_variableIdentifier))
 	{
 		// Invalid identifier
 		return;
 	}
 
 	// Create the dependency
-	if (!CreateDependencyFromUsToNodeInfo(Flux::FluxNode::NodeInfo(_classIdentifier, Flux::FluxNode::Type::Class)))
+	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _variableIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+
+	// Set the parent for the new variable
+	fluxHolderInstance->GetNodeWithIdentifier(_variableIdentifier)->SetParent(GetUniqueIdentifier());
+
+	// Add to the member array
+	m_LocalVariables.push_back(_variableIdentifier);
+}
+
+void Flux::FluxFunction::AddInputParam(FluxUniqueIdentifier _classIdentifier, std::string _name)
+{
+	// Get the dependency manager and the holder instances
+	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
+
+	// Check if the identifier is valid
+	if (!NodeFromIdentifierExist(_classIdentifier))
 	{
-		// We failed at creating the dependency
+		// Invalid identifier
 		return;
 	}
+
+	// Create the dependency
+	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the param
 	FluxFunctionParam param;
 	param.classIdentifier = _classIdentifier;
 	param.name = _name;
-	param.internalIdentifier = 0; // TODO
+	param.internalIdentifier = GetUniqueInternalNumber();
 
 	// Add the input param
 	m_InputParams.push_back(param);
@@ -51,25 +65,24 @@ void Flux::FluxFunction::AddInputParam(FluxUniqueIdentifier _classIdentifier, st
 
 void Flux::FluxFunction::AddReturnParam(FluxUniqueIdentifier _classIdentifier, std::string _name)
 {
+	// Get the dependency manager and the holder instances
+	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
+
 	// Check if the identifier is valid
-	if (!NodeFromIdentifierOfTypeExist(_classIdentifier, Type::Class))
+	if (!NodeFromIdentifierExist(_classIdentifier))
 	{
 		// Invalid identifier
 		return;
 	}
 
 	// Create the dependency
-	if (!CreateDependencyFromUsToNodeInfo(Flux::FluxNode::NodeInfo(_classIdentifier, Flux::FluxNode::Type::Class)))
-	{
-		// We failed at creating the dependency
-		return;
-	}
+	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the param
 	FluxFunctionParam param;
 	param.classIdentifier = _classIdentifier;
 	param.name = _name;
-	param.internalIdentifier = 0; // TODO
+	param.internalIdentifier = GetUniqueInternalNumber();
 
 	// Add the return param
 	m_ReturnParams.push_back(param);

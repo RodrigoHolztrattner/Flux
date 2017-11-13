@@ -8,6 +8,8 @@
 //////////////
 #include "..\FluxConfig.h"
 #include "..\FluxUniqueIdentifier.h"
+#include "..\FluxProject.h"
+#include "Dependency\FluxDependencyInterface.h"
 #include <vector>
 #include <string>
 
@@ -29,53 +31,40 @@ FluxNamespaceBegin(Flux)
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: FluxNode
 ////////////////////////////////////////////////////////////////////////////////
-class FluxNode
+class FluxNode : public FluxDependencyInterface
 {
 public:
 
-	// The node info type
-	struct NodeInfo
-	{
-		// A null constructor
-		NodeInfo() {}
-		NodeInfo(FluxUniqueIdentifier _identifier) : uniqueIdentifier(_identifier) {}
-
-		// The unique identifier
-		FluxUniqueIdentifier uniqueIdentifier;
-	};
-
-	// The node dependency type
-	struct NodeDependencyType
-	{
-		// The node info
-		NodeInfo info;
-
-		// The number of dependencies of this type
-		uint32_t totalDependencies;
-	};
-
 public:
-	FluxNode();
+	FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIdentifier);
 	FluxNode(const FluxNode&);
 	~FluxNode();
 
-public:
+	// Set the external name
+	void SetExternalName(std::string _name);
 
 	// Return our unique identifier
 	FluxUniqueIdentifier GetUniqueIdentifier();
 
-protected:
+	// Return if this node 
+	bool IsVerified();
 
-	// Check if a node from the given type exist
-	bool NodeFromIdentifierOfTypeExist(FluxUniqueIdentifier _identifier);
-
-	// Add a child node from the given identifier and type, also set the parent (we) and set the dependencies
-	void AddChildAndSetParentForNode(FluxUniqueIdentifier _identifier);
-
-private:
+	// Invalidade this node
+	void Invalidate();
 
 	// Set our parent
-	void SetParent(NodeInfo _parent);
+	virtual void SetParent(FluxUniqueIdentifier _parent);
+
+	// Conversion to the unique identifier type
+	operator FluxUniqueIdentifier() const { return m_UniqueIdentifier; }
+
+protected:
+
+	// Check if a node from the given identifier exist
+	bool NodeFromIdentifierExist(FluxUniqueIdentifier _identifier);
+
+	// Return a unique internal index number
+	uint32_t GetUniqueInternalNumber();
 
 ///////////////
 // VARIABLES //
@@ -84,14 +73,23 @@ private: //////
 	// Our unique identifier
 	FluxUniqueIdentifier m_UniqueIdentifier;
 
+	// The external name
+	std::string m_ExternalName;
+
+	// The parent node
+	FluxUniqueIdentifier m_ParentNode;
+
 	// Our generated name
 	// std::string m_GeneratedName;
 
-	// The parent node info
-	NodeInfo m_ParentInfo;
+	// If this node is verified
+	bool m_Verified;
 
-	// All children node info
-	std::vector<NodeInfo> m_ChildrenInfo;
+	// If this is a member node from a class (function, variable, etc)
+	bool m_MemberFromClass;
+
+	// Our internal current index number
+	uint32_t m_InternalIndexNumber;
 };
 
 // SmallPack

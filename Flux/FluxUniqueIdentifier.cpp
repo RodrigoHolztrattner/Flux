@@ -11,8 +11,14 @@ Flux::FluxUniqueIdentifier::FluxUniqueIdentifier()
 	m_Initialized = false;
 }
 
-Flux::FluxUniqueIdentifier::FluxUniqueIdentifier(const Flux::FluxUniqueIdentifier& other)
+Flux::FluxUniqueIdentifier::FluxUniqueIdentifier(const Flux::FluxUniqueIdentifier& _other)
 {
+	// Copy the data
+	m_Initialized = _other.m_Initialized;
+	m_ProjectName = _other.m_ProjectName;
+	m_Identifier = _other.m_Identifier;
+	m_Type = _other.m_Type;
+	m_ProjectReference = _other.m_ProjectReference;
 }
 
 Flux::FluxUniqueIdentifier::~FluxUniqueIdentifier()
