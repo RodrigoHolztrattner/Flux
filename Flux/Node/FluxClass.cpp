@@ -72,3 +72,62 @@ void Flux::FluxClass::AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAc
 	// Add the member function
 	m_MemberFunctions.push_back(memberFunction);
 }
+
+//////////
+// JSON //
+//////////
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxMemberVariable& _object)
+{
+	_json = nlohmann::json
+	{
+		{ "VariableUniqueIdentifier", _object.variableIdentifier },
+		{ "VariableAccessModifier", _object.variableAccessModifier },
+		{ "InternalIdentifierNumber", _object.internalIdentifier }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxMemberVariable& _object)
+{
+	_object.variableIdentifier = _json.at("VariableUniqueIdentifier").get<Flux::FluxUniqueIdentifier>();
+	_object.variableAccessModifier = _json.at("VariableAccessModifier").get<FluxAccessModifier>();
+	_object.internalIdentifier = _json.at("InternalIdentifierNumber").get<uint32_t>();
+}
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxMemberFunction& _object)
+{
+	_json = nlohmann::json
+	{
+		{ "FunctionUniqueIdentifier", _object.functionIdentifier },
+		{ "FunctionAccessModifier", _object.functionAccessModifier },
+		{ "InternalIdentifierNumber", _object.internalIdentifier }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxMemberFunction& _object)
+{
+	_object.functionIdentifier = _json.at("FunctionUniqueIdentifier").get<Flux::FluxUniqueIdentifier>();
+	_object.functionAccessModifier = _json.at("FunctionAccessModifier").get<FluxAccessModifier>();
+	_object.internalIdentifier = _json.at("InternalIdentifierNumber").get<uint32_t>();
+}
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxClass& _node)
+{
+	const Flux::FluxNode& node = _node;
+
+	_json = nlohmann::json
+	{
+		{ "FluxNode", node },
+		{ "MemberVariables", _node.m_MemberVariables },
+		{ "MemberFunctions", _node.m_MemberFunctions }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxClass& _node)
+{
+	Flux::FluxNode& node = _node;
+
+	node = _json.at("FluxNode").get<Flux::FluxNode>();
+	_node.m_MemberVariables = _json.at("MemberVariables").get<std::vector<Flux::FluxMemberVariable>>();
+	_node.m_MemberFunctions = _json.at("MemberFunctions").get<std::vector<Flux::FluxMemberFunction>>();
+}

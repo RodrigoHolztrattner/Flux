@@ -43,7 +43,6 @@ bool Flux::FluxHolder::InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqu
 	m_Objects[_identifier] = _node;
 
 	return true;
-
 }
 
 bool Flux::FluxHolder::NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _identifier)
@@ -55,4 +54,9 @@ bool Flux::FluxHolder::NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _ident
 	}
 
 	return true;
+}
+
+std::map<Flux::FluxUniqueIdentifier, Flux::FluxNode*>& Flux::FluxHolder::GetNodeObjects()
+{
+	return m_Objects;
 }

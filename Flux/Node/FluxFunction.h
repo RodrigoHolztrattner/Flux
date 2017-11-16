@@ -28,6 +28,10 @@ FluxNamespaceBegin(Flux)
 // The function param type
 struct FluxFunctionParam // O tipo sempre vai ser classe
 {
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxFunctionParam& _node);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxFunctionParam& _node);
+
 	// The class identifier
 	FluxUniqueIdentifier classIdentifier;
 
@@ -43,7 +47,9 @@ struct FluxFunctionParam // O tipo sempre vai ser classe
 ////////////////////////////////////////////////////////////////////////////////
 class FluxFunction : public FluxNode
 {
-public:
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxFunction& _node);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxFunction& _node);
 
 public:
 	FluxFunction(FluxProject* _project);
@@ -73,6 +79,13 @@ private: //////
 	// All return params
 	std::vector<FluxFunctionParam> m_ReturnParams;
 };
+
+// Json functions
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxFunctionParam& _funcParam);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxFunctionParam& _funcParam);
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxFunction& _node);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxFunction& _node);
 
 // SmallPack
 FluxNamespaceEnd(Flux)

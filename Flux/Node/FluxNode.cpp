@@ -6,6 +6,10 @@
 #include "Holder\FluxHolder.h"
 #include "Dependency\FluxDependencyManager.h"
 
+Flux::FluxNode::FluxNode()
+{
+}
+
 Flux::FluxNode::FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIdentifier)
 {
 	// Get the holder instance
@@ -20,10 +24,6 @@ Flux::FluxNode::FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIden
 
 	// Add this node
 	fluxHolderInstance->InsertNodeWithIdentifier(this, _uniqueIdentifier);
-}
-
-Flux::FluxNode::FluxNode(const Flux::FluxNode& other)
-{
 }
 
 Flux::FluxNode::~FluxNode()
@@ -88,4 +88,31 @@ void Flux::FluxNode::Invalidate()
 uint32_t Flux::FluxNode::GetUniqueInternalNumber()
 {
 	return m_InternalIndexNumber++;
+}
+
+//////////
+// JSON //
+//////////
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxNode& _node)
+{
+	_json = nlohmann::json
+	{
+		{ "UniqueIdentifier", _node.m_UniqueIdentifier },
+		{ "ExternalName", _node.m_ExternalName },
+		{ "ParentUniqueIdentifier", _node.m_ParentNode },
+		{ "Verified", _node.m_Verified },
+		{ "IsMember", _node.m_MemberFromClass },
+		{ "InternalIndexNumber", _node.m_InternalIndexNumber }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxNode& _node)
+{
+	_node.m_UniqueIdentifier		= _json.at("UniqueIdentifier").get<Flux::FluxUniqueIdentifier>();
+	_node.m_ExternalName			= _json.at("ExternalName").get<std::string>();
+	_node.m_ParentNode				= _json.at("ParentUniqueIdentifier").get<Flux::FluxUniqueIdentifier>();
+	_node.m_Verified				= _json.at("Verified").get<bool>();
+	_node.m_MemberFromClass			= _json.at("IsMember").get<bool>();
+	_node.m_InternalIndexNumber		= _json.at("InternalIndexNumber").get<uint32_t>();
 }

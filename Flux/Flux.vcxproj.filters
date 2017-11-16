@@ -35,6 +35,13 @@
     <ClCompile Include="Node\Dependency\FluxDependencyInterface.cpp">
       <Filter>Node\Dependency</Filter>
     </ClCompile>
+    <ClCompile Include="FluxProjectManager.cpp" />
+    <ClCompile Include="Node\FluxRoot.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\FluxNodeArchiver.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
@@ -70,6 +77,13 @@
     </ClInclude>
     <ClInclude Include="Node\Dependency\FluxDependencyInterface.h">
       <Filter>Node\Dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="FluxProjectManager.h" />
+    <ClInclude Include="Node\FluxRoot.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\FluxNodeArchiver.h">
+      <Filter>Node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

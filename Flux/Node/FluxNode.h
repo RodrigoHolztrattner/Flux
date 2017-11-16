@@ -12,6 +12,7 @@
 #include "Dependency\FluxDependencyInterface.h"
 #include <vector>
 #include <string>
+#include <json.hpp>
 
 /////////////
 // DEFINES //
@@ -33,11 +34,13 @@ FluxNamespaceBegin(Flux)
 ////////////////////////////////////////////////////////////////////////////////
 class FluxNode : public FluxDependencyInterface
 {
-public:
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxNode& _node);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxNode& _node);
 
 public:
+	FluxNode();
 	FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIdentifier);
-	FluxNode(const FluxNode&);
 	~FluxNode();
 
 	// Set the external name
@@ -91,6 +94,10 @@ private: //////
 	// Our internal current index number
 	uint32_t m_InternalIndexNumber;
 };
+
+// Json functions
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxNode& _node);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxNode& _node);
 
 // SmallPack
 FluxNamespaceEnd(Flux)

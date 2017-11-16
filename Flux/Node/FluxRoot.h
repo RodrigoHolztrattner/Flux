@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Filename: FluxVariable.h
+// Filename: FluxRoot.h
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
@@ -26,38 +26,33 @@
 FluxNamespaceBegin(Flux)
 
 ////////////////////////////////////////////////////////////////////////////////
-// Class name: FluxVariable
+// Class name: FluxRoot
 ////////////////////////////////////////////////////////////////////////////////
-class FluxVariable : public FluxNode
+class FluxRoot : public FluxNode
 {
 	// Json friend functions
-	friend void to_json(nlohmann::json& _json, const Flux::FluxVariable& _node);
-	friend void from_json(const nlohmann::json& _json, Flux::FluxVariable& _node);
+	friend void to_json(nlohmann::json& _json, const Flux::FluxRoot& _node);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxRoot& _node);
 
 public:
-	FluxVariable();
-	FluxVariable(FluxProject* _project);
-	~FluxVariable();
+	FluxRoot(FluxProject* _project);
+	~FluxRoot();
 
 public:
 
-	// Set the variable type
-	void SetVariableType(FluxUniqueIdentifier _classIdentifier);
-
-	// Return the variable type
-	FluxUniqueIdentifier GetVariableType();
+	// Connect a node
+	void ConnectNode(FluxUniqueIdentifier _node);
 
 ///////////////
 // VARIABLES //
 private: //////
 
-	// Our variable class type
-	FluxUniqueIdentifier m_VariableType;
+	// All connected nodes
+	std::vector<FluxUniqueIdentifier> m_ConnectedNodes;
 };
 
-// Json functions
-void Flux::to_json(nlohmann::json& _json, const Flux::FluxVariable& _node);
-void Flux::from_json(const nlohmann::json& _json, Flux::FluxVariable& _node);
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxRoot& _node);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxRoot& _node);
 
 // SmallPack
 FluxNamespaceEnd(Flux)

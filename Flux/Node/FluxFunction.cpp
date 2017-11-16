@@ -87,3 +87,47 @@ void Flux::FluxFunction::AddReturnParam(FluxUniqueIdentifier _classIdentifier, s
 	// Add the return param
 	m_ReturnParams.push_back(param);
 }
+
+//////////
+// JSON //
+//////////
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxFunctionParam& _funcParam)
+{
+	_json = nlohmann::json
+	{
+		{ "ParamClassTypeIdentifier", _funcParam.classIdentifier },
+		{ "ParamName", _funcParam.name },
+		{ "ParamInternalIdentifier", _funcParam.internalIdentifier }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxFunctionParam& _funcParam)
+{
+	_funcParam.classIdentifier = _json.at("ParamClassTypeIdentifier").get<Flux::FluxUniqueIdentifier>();
+	_funcParam.name = _json.at("ParamName").get<std::string>();
+	_funcParam.internalIdentifier = _json.at("ParamInternalIdentifier").get<uint32_t>();
+}
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxFunction& _node)
+{
+	const Flux::FluxNode& node = _node;
+
+	_json = nlohmann::json
+	{
+		{ "FluxNode", node },
+		{ "LocalVariables", _node.m_LocalVariables },
+		{ "InputParams", _node.m_InputParams },
+		{ "ReturnParams", _node.m_ReturnParams }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxFunction& _node)
+{
+	Flux::FluxNode& node = _node;
+
+	node = _json.at("FluxNode").get<Flux::FluxNode>();
+	_node.m_LocalVariables = _json.at("LocalVariables").get<std::vector<Flux::FluxUniqueIdentifier>>();
+	_node.m_InputParams = _json.at("InputParams").get<std::vector<Flux::FluxFunctionParam>>();
+	_node.m_ReturnParams = _json.at("ReturnParams").get<std::vector<Flux::FluxFunctionParam>>();
+}

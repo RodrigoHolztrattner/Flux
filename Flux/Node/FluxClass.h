@@ -36,6 +36,10 @@ enum class FluxAccessModifier
 // The member variable type
 struct FluxMemberVariable
 {
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxMemberVariable& _object);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxMemberVariable& _object);
+
 	// The variable identifier
 	FluxUniqueIdentifier variableIdentifier;
 
@@ -49,6 +53,10 @@ struct FluxMemberVariable
 // The member function type
 struct FluxMemberFunction
 {
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxMemberFunction& _object);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxMemberFunction& _object);
+
 	// The function identifier
 	FluxUniqueIdentifier functionIdentifier;
 
@@ -64,7 +72,9 @@ struct FluxMemberFunction
 ////////////////////////////////////////////////////////////////////////////////
 class FluxClass : public FluxNode
 {
-public:
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxClass& _object);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxClass& _object);
 
 public:
 	FluxClass(FluxProject* _project);
@@ -88,6 +98,16 @@ private: //////
 	// All member functions
 	std::vector<FluxMemberFunction> m_MemberFunctions;
 };
+
+// Json functions
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxMemberVariable& _object);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxMemberVariable& _object);
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxMemberFunction& _object);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxMemberFunction& _object);
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxClass& _object);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxClass& _object);
 
 // SmallPack
 FluxNamespaceEnd(Flux)

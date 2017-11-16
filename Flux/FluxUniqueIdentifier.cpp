@@ -25,11 +25,6 @@ Flux::FluxUniqueIdentifier::~FluxUniqueIdentifier()
 {
 }
 
-bool Flux::FluxUniqueIdentifier::Initialized()
-{
-	return m_Initialized;
-}
-
 void Flux::FluxUniqueIdentifier::Initialize(std::string _projectName, uint32_t _identifier, Type _type, Flux::FluxProject* _projectReference)
 {
 	// Set the data
@@ -40,4 +35,53 @@ void Flux::FluxUniqueIdentifier::Initialize(std::string _projectName, uint32_t _
 
 	// Set initialized to true
 	m_Initialized = true;
+}
+
+std::string Flux::FluxUniqueIdentifier::GetInternalName()
+{
+	return m_ProjectName;
+}
+
+Flux::Type Flux::FluxUniqueIdentifier::GetType()
+{
+	return m_Type;
+}
+
+bool Flux::FluxUniqueIdentifier::IsFromProjectWithInternalName(std::string _projectName)
+{
+	return m_ProjectName.compare(_projectName) == 0;
+}
+
+bool Flux::FluxUniqueIdentifier::IsFromType(Flux::Type _type)
+{
+	return m_Type == _type;
+}
+
+bool Flux::FluxUniqueIdentifier::Initialized()
+{
+	return m_Initialized;
+}
+
+//////////
+// JSON //
+//////////
+
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxUniqueIdentifier& _identifier)
+{
+	_json = nlohmann::json
+	{
+		{ "ProjectInternalName", _identifier.m_ProjectName },
+		{ "Identifier", _identifier.m_Identifier },
+		{ "Type", _identifier.m_Type }
+	};
+}
+
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxUniqueIdentifier& _identifier)
+{
+	_identifier.m_ProjectName = _json.at("ProjectInternalName").get<std::string>();
+	_identifier.m_Identifier = _json.at("Identifier").get<uint32_t>();
+	_identifier.m_Type = _json.at("Type").get<Flux::Type>();
+
+	// Set initialized to true
+	_identifier.m_Initialized = true;
 }

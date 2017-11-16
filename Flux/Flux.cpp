@@ -44,6 +44,8 @@ struct SomeData
 #include "Node\FluxFunction.h"
 #include "Node\FluxVariable.h"
 
+#include "Node\FluxNodeArchiver.h"
+
 int main()
 {
 	// PROJECT //
@@ -92,7 +94,21 @@ int main()
 
 	Flux::GlobalInstance<Flux::FluxUniqueIdentifier> identifier;
 	// int a = identifier->GetUniqueIdentifier();
-	// std::cout << a << std::endl;
+
+	newproject.SaveProjectData();
+
+	Flux::FluxUniqueIdentifier uniqueId = newproject.GenerateUniqueIdentifier(Flux::Type::Class);
+
+	//
+	Flux::FluxNodeArchiver<Flux::FluxClass> classArchiver("Class");
+
+	classArchiver.InsertNode(newClass);
+
+	nlohmann::json k;
+	k["NewObject"] = classArchiver;
+	
+	std::cout << k.dump(4) << std::endl;
+
 	return 0;
 }
 

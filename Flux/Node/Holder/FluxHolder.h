@@ -48,6 +48,9 @@ public:
 	// Check if a node from the given info exist
 	bool NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _identifier);
 
+	// Return a reference to our object array
+	std::map<FluxUniqueIdentifier, Flux::FluxNode*>& GetNodeObjects();
+
 ///////////////
 // VARIABLES //
 private: //////

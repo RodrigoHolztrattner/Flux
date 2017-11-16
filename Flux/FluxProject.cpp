@@ -2,6 +2,8 @@
 // Filename: FluxProject.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "FluxProject.h"
+#include "Node\FluxNodeArchiver.h"
+#include "Node\Holder\FluxHolder.h"
 #include <json.hpp>
 #include <iostream>
 #include <fstream>
@@ -10,6 +12,7 @@ Flux::FluxProject::FluxProject()
 {
 	// Set the initial data
 	m_UniqueIdentifierNumber = 0;
+	m_RootNode = nullptr;
 }
 
 Flux::FluxProject::FluxProject(const Flux::FluxProject& other)
@@ -43,6 +46,11 @@ std::string Flux::FluxProject::GetInternalProjectName()
 	return m_ProjectInternalName;
 }
 
+Flux::FluxRoot* Flux::FluxProject::GetRootNode()
+{
+	return m_RootNode;
+}
+
 void Flux::FluxProject::SaveProjectInfo()
 {
 	// Our json variable
@@ -56,7 +64,7 @@ void Flux::FluxProject::SaveProjectInfo()
 	// Set the output file
 	std::ofstream file;
 	file.open(m_ProjectExternalName + ProjectFileExtension);
-	file << json;
+	file << json.dump(4);
 	file.close();
 }
 
@@ -82,6 +90,78 @@ void Flux::FluxProject::LoadProjectInfo(std::string _projectName)
 	m_ProjectExternalName				= json["ProjectExternalName"].get<std::string>();
 	m_ProjectInternalName				= json["ProjectInternalName"].get<std::string>();
 	m_UniqueIdentifierNumber			= json["ProjectUniqueIndexNumber"].get<uint32_t>();
+}
+
+#include "Node\FluxClass.h"
+#include "Node\FluxFunction.h"
+#include "Node\FluxVariable.h"
+
+void Flux::FluxProject::SaveProjectData()
+{
+	// Prepare our archive objects
+	FluxNodeArchiver<FluxClass> classArchiver("Class");
+	FluxNodeArchiver<FluxFunction> functionArchiver("Function");
+	FluxNodeArchiver<FluxVariable> variableArchiver("Variable");
+
+	// Get the holder instance
+	Flux::GlobalInstance<Flux::FluxHolder> holderInstance;
+
+	// Get all node objects from the holder
+	typedef std::map<FluxUniqueIdentifier, Flux::FluxNode*> NodeIteratorType;
+	NodeIteratorType& nodeObjects = holderInstance->GetNodeObjects();
+
+	// For each node object
+	for (NodeIteratorType::iterator it = nodeObjects.begin(); it != nodeObjects.end(); ++it)
+	{
+		// Get the current node
+		Flux::FluxNode& currentNode = *it->second;
+
+		// Get the unique identifier
+		Flux::FluxUniqueIdentifier nodeIdentifier = currentNode.GetUniqueIdentifier();
+
+		// Switch the node type
+		switch (nodeIdentifier.GetType())
+		{
+			// Class
+			case Flux::Type::Class:
+			{
+				// Archive this object
+				classArchiver.InsertNode(currentNode);
+
+				break;
+			}
+
+			// Function
+			case Flux::Type::Function:
+			{
+				// Archive this object
+				functionArchiver.InsertNode(currentNode);
+
+				break;
+			}
+
+			// Variable
+			case Flux::Type::Variable:
+			{
+				// Archive this object
+				variableArchiver.InsertNode(currentNode);
+
+				break;
+			}
+		}
+	}
+
+	nlohmann::json k;
+	k["ClassObjects"] = classArchiver;
+	k["FunctionObjects"] = functionArchiver;
+	k["VariableObjects"] = variableArchiver;
+
+	std::cout << k.dump(4) << std::endl;
+}
+
+void Flux::FluxProject::LoadProjectData()
+{
+
 }
 
 Flux::FluxUniqueIdentifier Flux::FluxProject::GenerateUniqueIdentifier(Type _identifierType)

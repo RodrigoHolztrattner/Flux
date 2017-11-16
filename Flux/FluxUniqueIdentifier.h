@@ -7,6 +7,7 @@
 // INCLUDES //
 //////////////
 #include "FluxConfig.h"
+#include <json.hpp>
 #include <cstdint>
 #include <string>
 
@@ -43,11 +44,19 @@ enum class Type
 	Project		= 6
 };
 
+//////////////////////
+// JSON DECLARATION //
+//////////////////////
+
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: FluxUniqueIdentifier
 ////////////////////////////////////////////////////////////////////////////////
 class FluxUniqueIdentifier
 {
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxUniqueIdentifier& _identifier);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxUniqueIdentifier& _identifier);
+
 private:
 
 	// The FluxProject is a friend class
@@ -61,17 +70,30 @@ public:
 	// If this unique identifier was initialized
 	bool Initialized();
 
+	// Return the project internal name
+	std::string GetInternalName();
+
+	// Return the type
+	Flux::Type GetType();
+
+	// Check if this unique identifier is from the given project
+	bool IsFromProjectWithInternalName(std::string _projectName);
+
+	// Check if this unique identifier if from the given type
+	bool IsFromType(Flux::Type _type);
+
 	// Compare operator
 	bool operator <(const FluxUniqueIdentifier& rhs) const
 	{
+		// Compare the project names
 		int stringNameCompare = m_ProjectName.compare(rhs.m_ProjectName);
 
-		if (stringNameCompare != 0)						// Check project name first
-			return stringNameCompare != 0;
-		else if (m_Type != rhs.m_Type)					// Ok same project. Compare the type
-			return m_Type < rhs.m_Type;
-		else
-			return m_Identifier < rhs.m_Identifier;		// Ok same project and type, compare the identifier
+		// Check project name first
+		if (stringNameCompare != 0) return stringNameCompare != 0;
+		// Ok same project. Compare the type
+		else if (m_Type != rhs.m_Type) return m_Type < rhs.m_Type;
+		// Ok same project and type, compare the identifier
+		else return m_Identifier < rhs.m_Identifier;		
 	}
 
 protected:
@@ -95,9 +117,15 @@ private: //////
 	// The type
 	Type m_Type;
 
+	// colocar aqui se é uma referencia raiz (nodo raiz) e pertence ao projeto, devemos ter como verificar caso seja do projeto e retornar ele (pegar ele atraves do manager)
+
 	// The project reference
-	Flux::FluxProject* m_ProjectReference;
+	Flux::FluxProject* m_ProjectReference; // Not used / cant reconstruct from json
 };
+
+// Json functions
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxUniqueIdentifier& _identifier);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxUniqueIdentifier& _identifier);
 
 // SmallPack
 FluxNamespaceEnd(Flux)
