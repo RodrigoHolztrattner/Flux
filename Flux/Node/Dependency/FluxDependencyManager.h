@@ -26,12 +26,18 @@
 
 // SmallPack
 FluxNamespaceBegin(Flux)
-	
+
+// We know the FluxProjectArchiver class
+class FluxProjectArchiver;
+
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: FluxDependencyManager
 ////////////////////////////////////////////////////////////////////////////////
 class FluxDependencyManager
 {
+	// The FluxProjectArchiver is a friend
+	friend FluxProjectArchiver;
+
 public:
 
 public:
@@ -48,7 +54,16 @@ public:
 	// Notify all dependencies that the given identifier have
 	void NotifyDependencies(Flux::FluxUniqueIdentifier _identifier, FluxDependencyNotifyType _notifyType);
 
-	// 
+	// Check if the given identifier have any dependency
+	bool IdentifierHaveDependencies(Flux::FluxUniqueIdentifier _identifier);
+
+protected:
+
+	// Return all dependencies from the given project
+	std::vector<Flux::FluxDependency> GetDependenciesFromProject(std::string _projectInternalName);
+
+	// Construct dependencies from the given dependency vector
+	void ConstructDependencies(std::vector<Flux::FluxDependency>& _dependencyVector);
 
 private:
 
@@ -56,7 +71,10 @@ private:
 	Flux::FluxDependency* GetIdentifierDependencies(const Flux::FluxUniqueIdentifier& _identifier, bool _create = false);
 
 	// Create a dependency, src depends on dst
-	bool CreateDependency(const Flux::FluxUniqueIdentifier& _sourceIdentifier, const Flux::FluxUniqueIdentifier& _destinationIdentifier);
+	bool CreateDependency(Flux::FluxUniqueIdentifier& _sourceIdentifier, Flux::FluxUniqueIdentifier& _destinationIdentifier);
+
+	// Remove a dependency, src depends on dst
+	bool RemoveDependency(Flux::FluxUniqueIdentifier& _sourceIdentifier, Flux::FluxUniqueIdentifier& _destinationIdentifier);
 
 ///////////////
 // VARIABLES //

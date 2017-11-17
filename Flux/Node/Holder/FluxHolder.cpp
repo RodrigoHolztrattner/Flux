@@ -45,6 +45,22 @@ bool Flux::FluxHolder::InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqu
 	return true;
 }
 
+bool Flux::FluxHolder::RemoveNodeWithIdentifier(FluxUniqueIdentifier _identifier)
+{
+	// Check if the object exist
+	auto it = m_Objects.find(_identifier);
+	if (it == m_Objects.end())
+	{
+		// Return false because we dont have an object with the same identifier
+		return false;
+	}
+
+	// Remove the object
+	m_Objects.erase(it);
+
+	return true;
+}
+
 bool Flux::FluxHolder::NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _identifier)
 {
 	// Check if the result node is valid

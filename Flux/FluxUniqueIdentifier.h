@@ -29,8 +29,9 @@
 // SmallPack
 FluxNamespaceBegin(Flux)
 
-// We know the FluxProject class
+// We know the FluxProject and FluxNode classes
 class FluxProject;
+class FluxNode;
 
 // The type
 enum class Type
@@ -41,7 +42,8 @@ enum class Type
 	Namespace	= 3,
 	Variable	= 4,
 	Function	= 5,
-	Project		= 6
+	Project		= 6,
+	Root		= 7
 };
 
 //////////////////////
@@ -59,8 +61,9 @@ class FluxUniqueIdentifier
 
 private:
 
-	// The FluxProject is a friend class
+	// The FluxProject and FluxNode are friend classes
 	friend FluxProject;
+	friend FluxNode;
 
 public:
 	FluxUniqueIdentifier();
@@ -69,6 +72,9 @@ public:
 
 	// If this unique identifier was initialized
 	bool Initialized();
+
+	// Invalidate this identifier
+	void Invalidate();
 
 	// Return the project internal name
 	std::string GetInternalName();
@@ -82,7 +88,10 @@ public:
 	// Check if this unique identifier if from the given type
 	bool IsFromType(Flux::Type _type);
 
-	// Compare operator
+	// Access as a flux node
+	FluxNode* operator->() const;
+
+	// Less operator
 	bool operator <(const FluxUniqueIdentifier& rhs) const
 	{
 		// Compare the project names
@@ -93,7 +102,22 @@ public:
 		// Ok same project. Compare the type
 		else if (m_Type != rhs.m_Type) return m_Type < rhs.m_Type;
 		// Ok same project and type, compare the identifier
-		else return m_Identifier < rhs.m_Identifier;		
+		else return m_Identifier < rhs.m_Identifier;
+	}
+
+	// Compare operator
+	bool operator ==(const FluxUniqueIdentifier& rhs) const
+	{
+		// Compare the project names
+		int stringNameCompare = m_ProjectName.compare(rhs.m_ProjectName);
+
+		// Check project name first
+		if ((stringNameCompare == 0) && (m_Type == rhs.m_Type) && (m_Identifier == rhs.m_Identifier))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 protected:
@@ -118,9 +142,6 @@ private: //////
 	Type m_Type;
 
 	// colocar aqui se é uma referencia raiz (nodo raiz) e pertence ao projeto, devemos ter como verificar caso seja do projeto e retornar ele (pegar ele atraves do manager)
-
-	// The project reference
-	Flux::FluxProject* m_ProjectReference; // Not used / cant reconstruct from json
 };
 
 // Json functions

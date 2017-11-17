@@ -35,6 +35,11 @@ class FluxVariable : public FluxNode
 	friend void from_json(const nlohmann::json& _json, Flux::FluxVariable& _node);
 
 public:
+
+	// The node name
+	static const char* NodeTypeName;
+
+public:
 	FluxVariable();
 	FluxVariable(FluxProject* _project);
 	~FluxVariable();
@@ -45,7 +50,13 @@ public:
 	void SetVariableType(FluxUniqueIdentifier _classIdentifier);
 
 	// Return the variable type
-	FluxUniqueIdentifier GetVariableType();
+	FluxUniqueIdentifier GetVariableType(){ return m_VariableType; }
+
+	// Verify this node
+	virtual void Verify();
+
+	// Delete this node
+	virtual void Delete();
 
 ///////////////
 // VARIABLES //

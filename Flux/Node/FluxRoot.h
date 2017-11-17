@@ -35,6 +35,12 @@ class FluxRoot : public FluxNode
 	friend void from_json(const nlohmann::json& _json, Flux::FluxRoot& _node);
 
 public:
+
+	// The node name
+	static const char* NodeTypeName;
+
+public:
+	FluxRoot();
 	FluxRoot(FluxProject* _project);
 	~FluxRoot();
 
@@ -42,6 +48,9 @@ public:
 
 	// Connect a node
 	void ConnectNode(FluxUniqueIdentifier _node);
+
+	// Disconnect a node
+	void DisconnectNode(FluxUniqueIdentifier _node);
 
 ///////////////
 // VARIABLES //
@@ -51,6 +60,7 @@ private: //////
 	std::vector<FluxUniqueIdentifier> m_ConnectedNodes;
 };
 
+// Json methods
 void Flux::to_json(nlohmann::json& _json, const Flux::FluxRoot& _node);
 void Flux::from_json(const nlohmann::json& _json, Flux::FluxRoot& _node);
 

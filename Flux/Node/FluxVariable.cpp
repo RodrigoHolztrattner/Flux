@@ -3,6 +3,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "FluxVariable.h"
 #include "Dependency\FluxDependencyManager.h"
+#include "..\Project\FluxProject.h"
+
+const char* Flux::FluxVariable::NodeTypeName = "Variable";
 
 Flux::FluxVariable::FluxVariable()
 {
@@ -20,36 +23,41 @@ Flux::FluxVariable::~FluxVariable()
 
 void Flux::FluxVariable::SetVariableType(FluxUniqueIdentifier _classIdentifier)
 {
-	// Get the dependency manager instance
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Check if the identifier is valid
-	if (!NodeFromIdentifierExist(_classIdentifier))
-	{
-		// Invalid identifier
-		return;
-	}
-
-	// Check if we should remove an old relation
-	if (m_VariableType.Initialized())
-	{
-		// Remove this relation
-		dependencyManagerInstance->RemoveDependencyRelation(GetUniqueIdentifier(), m_VariableType, FluxDependencyRelationType::SrcDependsOnDst);
-	}
-
-	// Create the dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+	// Swap the dependency relation with the new one
+	SwapDependencyRelation(m_VariableType, _classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Set the variable type
 	m_VariableType = _classIdentifier;
 
 	// Notify all dependencies (signature changed)
-	dependencyManagerInstance->NotifyDependencies(GetUniqueIdentifier(), FluxDependencyNotifyType::SignatureChanged);
+	NotifyDependencies(FluxDependencyNotifyType::SignatureChanged);
+
+	// Invalidate this node
+	Invalidate();
 }
 
-Flux::FluxUniqueIdentifier Flux::FluxVariable::GetVariableType()
+void Flux::FluxVariable::Verify()
 {
-	return m_VariableType;
+	// Check if our type identifier exist
+	if (!NodeFromIdentifierExist(m_VariableType))
+	{
+		// Invalid identifier
+		m_VariableType.Invalidate();
+
+		return;
+	}
+
+	// Call the base method
+	Flux::FluxNode::Verify();
+}
+
+void Flux::FluxVariable::Delete()
+{
+	// Remove the old type relation if it exist
+	RemoveDependencyRelation(m_VariableType, FluxDependencyRelationType::SrcDependsOnDst);
+
+	// Call the base method
+	Flux::FluxNode::Delete();
 }
 
 //////////

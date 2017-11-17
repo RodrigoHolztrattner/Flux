@@ -77,16 +77,27 @@ class FluxClass : public FluxNode
 	friend void from_json(const nlohmann::json& _json, Flux::FluxClass& _object);
 
 public:
+
+	// The node name
+	static const char* NodeTypeName;
+
+public:
+	FluxClass();
 	FluxClass(FluxProject* _project);
 	~FluxClass();
 
 public:
 
-	// Add a member variable
-	void AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier);
+	// Add/remove a member variable
+	uint32_t AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier);
+	bool RemoveMemberVariable(uint32_t _memberInternalIdentifier);
 
-	// Add a member function
-	void AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier);
+	// Add/remove a member function
+	uint32_t AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier);
+	bool RemoveMemberFunction(uint32_t _memberInternalIdentifier);
+
+	// Verify this node
+	virtual void Verify();
 
 ///////////////
 // VARIABLES //

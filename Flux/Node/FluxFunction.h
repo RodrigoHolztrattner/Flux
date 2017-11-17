@@ -52,19 +52,31 @@ class FluxFunction : public FluxNode
 	friend void from_json(const nlohmann::json& _json, Flux::FluxFunction& _node);
 
 public:
+
+	// The node name
+	static const char* NodeTypeName;
+
+public:
+	FluxFunction();
 	FluxFunction(FluxProject* _project);
 	~FluxFunction();
 
 public:
 
-	// Add a local variable
+	// Add/remove a local variable
 	void AddLocalVariable(FluxUniqueIdentifier _variableIdentifier);
+	bool RemoveLocalVariable(FluxUniqueIdentifier _variableIdentifier);
 
-	// Add an input param
+	// Add/remove an input param
 	void AddInputParam(FluxUniqueIdentifier _classIdentifier, std::string _name);
+	bool RemoveInputParam(uint32_t _paramInternalIdentifier);
 
-	// Add a return param
+	// Add/remove a return param
 	void AddReturnParam(FluxUniqueIdentifier _classIdentifier, std::string _name);
+	bool RemoveReturnParam(uint32_t _paramInternalIdentifier);
+
+	// Verify this node
+	virtual void Verify();
 
 ///////////////
 // VARIABLES //

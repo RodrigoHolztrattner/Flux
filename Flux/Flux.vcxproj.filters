@@ -16,7 +16,6 @@
       <Filter>Node</Filter>
     </ClCompile>
     <ClCompile Include="FluxUniqueIdentifier.cpp" />
-    <ClCompile Include="FluxProject.cpp" />
     <ClCompile Include="Node\FluxClass.cpp">
       <Filter>Node</Filter>
     </ClCompile>
@@ -35,12 +34,20 @@
     <ClCompile Include="Node\Dependency\FluxDependencyInterface.cpp">
       <Filter>Node\Dependency</Filter>
     </ClCompile>
-    <ClCompile Include="FluxProjectManager.cpp" />
     <ClCompile Include="Node\FluxRoot.cpp">
       <Filter>Node</Filter>
     </ClCompile>
-    <ClCompile Include="Node\FluxNodeArchiver.cpp">
-      <Filter>Node</Filter>
+    <ClCompile Include="Project\FluxProject.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\FluxProjectManager.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\FluxProjectArchiver.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\Archiver\FluxNodeArchiver.cpp">
+      <Filter>Node\Archiver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,7 +66,6 @@
       <Filter>Node</Filter>
     </ClInclude>
     <ClInclude Include="FluxUniqueIdentifier.h" />
-    <ClInclude Include="FluxProject.h" />
     <ClInclude Include="Node\FluxClass.h">
       <Filter>Node</Filter>
     </ClInclude>
@@ -78,12 +84,20 @@
     <ClInclude Include="Node\Dependency\FluxDependencyInterface.h">
       <Filter>Node\Dependency</Filter>
     </ClInclude>
-    <ClInclude Include="FluxProjectManager.h" />
     <ClInclude Include="Node\FluxRoot.h">
       <Filter>Node</Filter>
     </ClInclude>
-    <ClInclude Include="Node\FluxNodeArchiver.h">
-      <Filter>Node</Filter>
+    <ClInclude Include="Project\FluxProject.h">
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\FluxProjectManager.h">
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\FluxProjectArchiver.h">
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\Archiver\FluxNodeArchiver.h">
+      <Filter>Node\Archiver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +112,12 @@
     </Filter>
     <Filter Include="Node\Dependency">
       <UniqueIdentifier>{69342598-a11c-4f05-a1eb-7133e073a316}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project">
+      <UniqueIdentifier>{6b574d47-3e20-4ab1-a125-7381dcd1d5e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node\Archiver">
+      <UniqueIdentifier>{ec3d23cd-0966-4bcd-b969-9577b28ee20e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

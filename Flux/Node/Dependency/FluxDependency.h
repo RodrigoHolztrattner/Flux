@@ -9,8 +9,7 @@
 #include "..\..\FluxConfig.h"
 #include "..\..\FluxUniqueIdentifier.h"
 #include "FluxDependencyInterface.h"
-#include "..\FluxNode.h"
-#include <map>
+#include <unordered_map>
 
 /////////////
 // DEFINES //
@@ -41,18 +40,52 @@ diferentes, devemos usar o mesmo tipo de dependência mas sim com um contador.
 * A dependency class deve ter funções virtuais de notify e receive notify (pensar nomes que tenham a ver com dependency)
 */
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Class name: FluxUniqueIdentifier
+////////////////////////////////////////////////////////////////////////////////
+class BFluxUniqueIdentifier
+{
+public:
+	BFluxUniqueIdentifier() {}
+	~BFluxUniqueIdentifier() {}
+
+	Flux::BFluxUniqueIdentifier& operator=(Flux::BFluxUniqueIdentifier&& _Right)
+
+	{	// assign from moved pair
+
+		return (*this);
+	}
+
+	// Compare operator
+	bool operator <(const BFluxUniqueIdentifier& rhs) const
+	{
+		return true;
+	}
+
+
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: FluxDependency
 ////////////////////////////////////////////////////////////////////////////////
 class FluxDependency
 {
+	// Json friend functions
+	friend void to_json(nlohmann::json& _json, const Flux::FluxDependency& _object);
+	friend void from_json(const nlohmann::json& _json, Flux::FluxDependency& _object);
+
 public:
 
 	// The dependency type
 	struct DependencyType
 	{
+		// Json friend functions
+		friend void to_json(nlohmann::json& _json, const Flux::FluxDependency::DependencyType& _object);
+		friend void from_json(const nlohmann::json& _json, Flux::FluxDependency::DependencyType& _object);
+
 		DependencyType() {}
-		DependencyType(FluxUniqueIdentifier _identifier) : uniqueIdentifier(_identifier) {}
+		DependencyType(FluxUniqueIdentifier _identifier) : uniqueIdentifier(_identifier), totalDependencies(1) {}
 
 		// The unique identifier
 		FluxUniqueIdentifier uniqueIdentifier;
@@ -62,18 +95,24 @@ public:
 	};
 
 public:
+	FluxDependency();
 	FluxDependency(FluxUniqueIdentifier _ownerIdentifier);
-	FluxDependency(const FluxDependency&);
 	~FluxDependency();
 
 	// Insert dependency
-	void InsertDependency(const FluxUniqueIdentifier& _identifier);
+	void InsertDependency(FluxUniqueIdentifier& _identifier);
 
 	// Remove a dependency
-	void RemoveDependency(const FluxUniqueIdentifier& _identifier);
+	void RemoveDependency(FluxUniqueIdentifier& _identifier);
 
 	// Notify all dependencies
 	void NotifyDependencies(FluxDependencyNotifyType _notifyType);
+
+	// Return the owner unique identifier
+	FluxUniqueIdentifier GetOwnerIdentifier();
+
+	// Return the total number of dependencies
+	uint32_t GetDependencyCount() { return m_Dependencies.size(); }
 
 private:
 
@@ -85,8 +124,15 @@ private: //////
 	FluxUniqueIdentifier m_OwnerIdentifier;
 
 	// All items that depends on this
-	std::map<Flux::FluxUniqueIdentifier, DependencyType> m_Dependencies;
+	std::map<FluxUniqueIdentifier, Flux::FluxDependency::DependencyType> m_Dependencies;
 };
+
+// Json methods
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxDependency& _object);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxDependency& _object);
+//
+void Flux::to_json(nlohmann::json& _json, const Flux::FluxDependency::DependencyType& _object);
+void Flux::from_json(const nlohmann::json& _json, Flux::FluxDependency::DependencyType& _object);
 
 // SmallPack
 FluxNamespaceEnd(Flux)

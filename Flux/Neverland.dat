@@ -1,0 +1,158 @@
+{
+    "ProjectData": {
+        "ClassObjects": {
+            "Class": [
+                {
+                    "FluxNode": {
+                        "ExternalName": "DummyClass",
+                        "InternalIndexNumber": 1,
+                        "IsMember": false,
+                        "ParentUniqueIdentifier": {
+                            "Identifier": 73,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 7
+                        },
+                        "UniqueIdentifier": {
+                            "Identifier": 76,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 1
+                        },
+                        "Verified": false
+                    },
+                    "MemberFunctions": [],
+                    "MemberVariables": [
+                        {
+                            "InternalIdentifierNumber": 0,
+                            "VariableAccessModifier": 2,
+                            "VariableUniqueIdentifier": {
+                                "Identifier": 77,
+                                "ProjectInternalName": "Neverland",
+                                "Type": 4
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "DependencyObjects": [
+            {
+                "Dependencies": [
+                    {
+                        "TotalDependencies": 2,
+                        "UniqueIdentifier": {
+                            "Identifier": 77,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 4
+                        }
+                    },
+                    {
+                        "TotalDependencies": 1,
+                        "UniqueIdentifier": {
+                            "Identifier": 73,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 7
+                        }
+                    }
+                ],
+                "OwnerIdentifier": {
+                    "Identifier": 76,
+                    "ProjectInternalName": "Neverland",
+                    "Type": 1
+                }
+            },
+            {
+                "Dependencies": [
+                    {
+                        "TotalDependencies": 1,
+                        "UniqueIdentifier": {
+                            "Identifier": 76,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 1
+                        }
+                    }
+                ],
+                "OwnerIdentifier": {
+                    "Identifier": 77,
+                    "ProjectInternalName": "Neverland",
+                    "Type": 4
+                }
+            },
+            {
+                "Dependencies": [
+                    {
+                        "TotalDependencies": 2,
+                        "UniqueIdentifier": {
+                            "Identifier": 76,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 1
+                        }
+                    }
+                ],
+                "OwnerIdentifier": {
+                    "Identifier": 73,
+                    "ProjectInternalName": "Neverland",
+                    "Type": 7
+                }
+            }
+        ],
+        "FunctionObjects": {
+            "Function": []
+        },
+        "RootObject": {
+            "Root": [
+                {
+                    "ConnectedNodes": [
+                        {
+                            "Identifier": 76,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 1
+                        }
+                    ],
+                    "FluxNode": {
+                        "ExternalName": "ProjectRoot",
+                        "InternalIndexNumber": 0,
+                        "IsMember": false,
+                        "ParentUniqueIdentifier": {
+                            "Identifier": 4294967295,
+                            "ProjectInternalName": "",
+                            "Type": 0
+                        },
+                        "UniqueIdentifier": {
+                            "Identifier": 73,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 7
+                        },
+                        "Verified": false
+                    }
+                }
+            ]
+        },
+        "VariableObjects": {
+            "Variable": [
+                {
+                    "FluxNode": {
+                        "ExternalName": "DummyVariable",
+                        "InternalIndexNumber": 0,
+                        "IsMember": true,
+                        "ParentUniqueIdentifier": {
+                            "Identifier": 76,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 1
+                        },
+                        "UniqueIdentifier": {
+                            "Identifier": 77,
+                            "ProjectInternalName": "Neverland",
+                            "Type": 4
+                        },
+                        "Verified": false
+                    },
+                    "VariableTypeUniqueIdentifier": {
+                        "Identifier": 76,
+                        "ProjectInternalName": "Neverland",
+                        "Type": 1
+                    }
+                }
+            ]
+        }
+    }
+}

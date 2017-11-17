@@ -4,6 +4,13 @@
 #include "FluxClass.h"
 #include "Holder\FluxHolder.h"
 #include "Dependency\FluxDependencyManager.h"
+#include "..\Project\FluxProject.h"
+
+const char* Flux::FluxClass::NodeTypeName = "Class";
+
+Flux::FluxClass::FluxClass()
+{
+}
 
 Flux::FluxClass::FluxClass(FluxProject* _project) : FluxNode(_project, _project->GenerateUniqueIdentifier(Type::Class))
 {
@@ -15,21 +22,10 @@ Flux::FluxClass::~FluxClass()
 {
 }
 
-void Flux::FluxClass::AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier)
+uint32_t Flux::FluxClass::AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier)
 {
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
-
-	// Check if the identifier is valid
-	if (!NodeFromIdentifierExist(_identifier))
-	{
-		// Invalid identifier
-		return;
-	}
-
 	// Create the dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _identifier, FluxDependencyRelationType::SrcDependsOnDst);
+	AddDependencyRelation(_identifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the member variable
 	FluxMemberVariable memberVariable;
@@ -38,27 +34,48 @@ void Flux::FluxClass::AddMemberVariable(FluxUniqueIdentifier _identifier, FluxAc
 	memberVariable.internalIdentifier = GetUniqueInternalNumber();
 
 	// Set the parent for the new variable
-	fluxHolderInstance->GetNodeWithIdentifier(_identifier)->SetParent(GetUniqueIdentifier());
+	_identifier->SetParent(*this);
 
 	// Add the member variable
 	m_MemberVariables.push_back(memberVariable);
+
+	// Invalidate this node
+	Invalidate();
+
+	return memberVariable.internalIdentifier;
 }
 
-void Flux::FluxClass::AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier)
+bool Flux::FluxClass::RemoveMemberVariable(uint32_t _memberInternalIdentifier)
 {
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
-
-	// Check if the identifier is valid
-	if (!NodeFromIdentifierExist(_identifier))
+	// Search the member
+	for (unsigned int i = 0; i < m_MemberVariables.size(); i++)
 	{
-		// Invalid identifier
-		return;
+		// Check the internal identifier
+		if (m_MemberVariables[i].internalIdentifier == _memberInternalIdentifier)
+		{
+			// Remove the dependency
+			RemoveDependencyRelation(m_MemberVariables[i].variableIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+
+			// Invalidate the member parent
+			m_MemberVariables[i].variableIdentifier->InvalidateParent();
+
+			// Remove the member
+			m_MemberVariables.erase(m_MemberVariables.begin() + i);
+
+			// Invalidate this node
+			Invalidate();
+
+			return true;
+		}
 	}
 
+	return false;
+}
+
+uint32_t Flux::FluxClass::AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAccessModifier _accessModifier)
+{
 	// Create the dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _identifier, FluxDependencyRelationType::SrcDependsOnDst);
+	AddDependencyRelation(_identifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the member function
 	FluxMemberFunction memberFunction;
@@ -67,10 +84,70 @@ void Flux::FluxClass::AddMemberFunction(FluxUniqueIdentifier _identifier, FluxAc
 	memberFunction.internalIdentifier = GetUniqueInternalNumber();
 
 	// Set the parent for the new variable
-	fluxHolderInstance->GetNodeWithIdentifier(_identifier)->SetParent(GetUniqueIdentifier());
+	_identifier->SetParent(*this);
 
 	// Add the member function
 	m_MemberFunctions.push_back(memberFunction);
+
+	// Invalidate this node
+	Invalidate();
+
+	return memberFunction.internalIdentifier;
+}
+
+bool Flux::FluxClass::RemoveMemberFunction(uint32_t _memberInternalIdentifier)
+{
+	// Search the member
+	for (unsigned int i = 0; i < m_MemberFunctions.size(); i++)
+	{
+		// Check the internal identifier
+		if (m_MemberFunctions[i].internalIdentifier == _memberInternalIdentifier)
+		{
+			// Remove the dependency
+			RemoveDependencyRelation(m_MemberFunctions[i].functionIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+
+			// Invalidate the member parent
+			m_MemberFunctions[i].functionIdentifier->InvalidateParent();
+
+			// Remove the member
+			m_MemberFunctions.erase(m_MemberFunctions.begin() + i);
+
+			// Invalidate this node
+			Invalidate();
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Flux::FluxClass::Verify()
+{
+	// For each member variable
+	for (auto& memberVariable : m_MemberVariables)
+	{
+		// Check if this member variable exist
+		if (!NodeFromIdentifierExist(memberVariable.variableIdentifier))
+		{
+			// Invalid node
+			return;
+		}
+	}
+
+	// For each member function
+	for (auto& memberFunction : m_MemberFunctions)
+	{
+		// Check if this member function exist
+		if (!NodeFromIdentifierExist(memberFunction.functionIdentifier))
+		{
+			// Invalid node
+			return;
+		}
+	}
+
+	// Call the base method
+	Flux::FluxNode::Verify();
 }
 
 //////////

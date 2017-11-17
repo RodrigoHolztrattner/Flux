@@ -146,40 +146,42 @@
   <ItemGroup>
     <ClCompile Include="BaseClass.cpp" />
     <ClCompile Include="Flux.cpp" />
-    <ClCompile Include="FluxProject.cpp" />
-    <ClCompile Include="FluxProjectManager.cpp" />
     <ClCompile Include="FluxUniqueIdentifier.cpp" />
+    <ClCompile Include="Node\Archiver\FluxNodeArchiver.cpp" />
     <ClCompile Include="Node\Dependency\FluxDependency.cpp" />
     <ClCompile Include="Node\Dependency\FluxDependencyInterface.cpp" />
     <ClCompile Include="Node\Dependency\FluxDependencyManager.cpp" />
     <ClCompile Include="Node\FluxClass.cpp" />
     <ClCompile Include="Node\FluxFunction.cpp" />
     <ClCompile Include="Node\FluxNode.cpp" />
-    <ClCompile Include="Node\FluxNodeArchiver.cpp" />
     <ClCompile Include="Node\FluxRoot.cpp" />
     <ClCompile Include="Node\FluxVariable.cpp" />
     <ClCompile Include="Node\FunctionSource\FluxFunctionSource.cpp" />
     <ClCompile Include="Node\FunctionSource\FluxFunctionSourceNode.cpp" />
     <ClCompile Include="Node\Holder\FluxHolder.cpp" />
+    <ClCompile Include="Project\FluxProject.cpp" />
+    <ClCompile Include="Project\FluxProjectArchiver.cpp" />
+    <ClCompile Include="Project\FluxProjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
     <ClInclude Include="FluxConfig.h" />
-    <ClInclude Include="FluxProject.h" />
-    <ClInclude Include="FluxProjectManager.h" />
     <ClInclude Include="FluxUniqueIdentifier.h" />
+    <ClInclude Include="Node\Archiver\FluxNodeArchiver.h" />
     <ClInclude Include="Node\Dependency\FluxDependency.h" />
     <ClInclude Include="Node\Dependency\FluxDependencyInterface.h" />
     <ClInclude Include="Node\Dependency\FluxDependencyManager.h" />
     <ClInclude Include="Node\FluxClass.h" />
     <ClInclude Include="Node\FluxFunction.h" />
     <ClInclude Include="Node\FluxNode.h" />
-    <ClInclude Include="Node\FluxNodeArchiver.h" />
     <ClInclude Include="Node\FluxRoot.h" />
     <ClInclude Include="Node\FluxVariable.h" />
     <ClInclude Include="Node\FunctionSource\FluxFunctionSource.h" />
     <ClInclude Include="Node\FunctionSource\FluxFunctionSourceNode.h" />
     <ClInclude Include="Node\Holder\FluxHolder.h" />
+    <ClInclude Include="Project\FluxProject.h" />
+    <ClInclude Include="Project\FluxProjectArchiver.h" />
+    <ClInclude Include="Project\FluxProjectManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

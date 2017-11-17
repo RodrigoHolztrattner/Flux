@@ -6,9 +6,9 @@
 //////////////
 // INCLUDES //
 //////////////
-#include "..\FluxConfig.h"
-#include "..\FluxUniqueIdentifier.h"
-#include "FluxNode.h"
+#include "..\..\FluxConfig.h"
+#include "..\..\FluxUniqueIdentifier.h"
+#include "..\FluxNode.h"
 #include <string>
 
 /////////////
@@ -37,8 +37,7 @@ class FluxNodeArchiver
 	// friend void from_json(const nlohmann::json& _json, Flux::FluxNodeArchiver<NodeType>& _node);
 
 public:
-	FluxNodeArchiver(std::string _jsonSaveName) { m_JsonSaveName = _jsonSaveName; }
-	FluxNodeArchiver(const FluxNodeArchiver&) {}
+	FluxNodeArchiver() {}
 	~FluxNodeArchiver() {}
 
 public:
@@ -50,6 +49,20 @@ public:
 		m_Nodes.push_back(node);
 	}
 
+	// Return a reference to all nodes
+	void GetNodeVectorReference(std::vector<NodeType*>* _vectorPtr)
+	{
+		for (auto& node : m_Nodes)
+		{
+			NodeType* newNode = new NodeType();
+			*newNode = node;
+			_vectorPtr->push_back(newNode);
+		}
+	}
+
+	// Return the size
+	uint32_t size() { return m_Nodes.size(); }
+
 protected:
 
 ///////////////
@@ -58,9 +71,6 @@ public: ///////
 	
 	// All nodes
 	std::vector<NodeType> m_Nodes;
-
-	// The json save name
-	std::string m_JsonSaveName;
 };
 
 // Json functions
@@ -69,14 +79,14 @@ void to_json(nlohmann::json& _json, const Flux::FluxNodeArchiver<NodeType>& _nod
 {
 	_json = nlohmann::json
 	{
-		{ _node.m_JsonSaveName, _node.m_Nodes }
+		{ NodeType::NodeTypeName, _node.m_Nodes }
 	};
 }
 
 template <typename NodeType>
 void from_json(const nlohmann::json& _json, Flux::FluxNodeArchiver<NodeType>& _node)
 {
-	_node.m_Nodes = _json.at(_node.m_JsonSaveName).get<std::vector<NodeType>>();
+	_node.m_Nodes = _json.at(NodeType::NodeTypeName).get<std::vector<NodeType>>();
 }
 
 // SmallPack

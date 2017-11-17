@@ -4,6 +4,13 @@
 #include "FluxFunction.h"
 #include "Holder\FluxHolder.h"
 #include "Dependency\FluxDependencyManager.h"
+#include "..\Project\FluxProject.h"
+
+const char* Flux::FluxFunction::NodeTypeName = "Function";
+
+Flux::FluxFunction::FluxFunction()
+{
+}
 
 Flux::FluxFunction::FluxFunction(FluxProject* _project) : FluxNode(_project, _project->GenerateUniqueIdentifier(Type::Function))
 {
@@ -17,41 +24,50 @@ Flux::FluxFunction::~FluxFunction()
 
 void Flux::FluxFunction::AddLocalVariable(FluxUniqueIdentifier _variableIdentifier)
 {
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
-
-	// Check if the identifier is valid
-	if (!NodeFromIdentifierExist(_variableIdentifier))
-	{
-		// Invalid identifier
-		return;
-	}
-
 	// Create the dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _variableIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+	AddDependencyRelation(_variableIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Set the parent for the new variable
-	fluxHolderInstance->GetNodeWithIdentifier(_variableIdentifier)->SetParent(GetUniqueIdentifier());
+	_variableIdentifier->SetParent(this);
 
 	// Add to the member array
 	m_LocalVariables.push_back(_variableIdentifier);
+
+	// Invalidate this node
+	Invalidate();
+}
+
+bool Flux::FluxFunction::RemoveLocalVariable(FluxUniqueIdentifier _variableIdentifier)
+{
+	// Search the local variable
+	for (unsigned int i=0; i<m_LocalVariables.size(); i++)
+	{
+		// Compare the identifiers
+		if (m_LocalVariables[i] == _variableIdentifier)
+		{
+			// Remove the dependency
+			RemoveDependencyRelation(_variableIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+
+			// Set the parent for the new variable
+			_variableIdentifier->InvalidateParent();
+
+			// Remove the variable
+			m_LocalVariables.erase(m_LocalVariables.begin() + i);
+
+			// Invalidate this node
+			Invalidate();
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Flux::FluxFunction::AddInputParam(FluxUniqueIdentifier _classIdentifier, std::string _name)
 {
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Check if the identifier is valid
-	if (!NodeFromIdentifierExist(_classIdentifier))
-	{
-		// Invalid identifier
-		return;
-	}
-
 	// Create the dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+	AddDependencyRelation(_classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the param
 	FluxFunctionParam param;
@@ -61,22 +77,39 @@ void Flux::FluxFunction::AddInputParam(FluxUniqueIdentifier _classIdentifier, st
 
 	// Add the input param
 	m_InputParams.push_back(param);
+
+	// Invalidate this node
+	Invalidate();
+}
+
+bool Flux::FluxFunction::RemoveInputParam(uint32_t _paramInternalIdentifier)
+{
+	// Search the param
+	for (unsigned int i = 0; i < m_InputParams.size(); i++)
+	{
+		// Check the internal identifier
+		if (m_InputParams[i].internalIdentifier == _paramInternalIdentifier)
+		{
+			// Remove the dependency
+			RemoveDependencyRelation(m_InputParams[i].classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+
+			// Remove the param
+			m_InputParams.erase(m_InputParams.begin() + i);
+
+			// Invalidate this node
+			Invalidate();
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Flux::FluxFunction::AddReturnParam(FluxUniqueIdentifier _classIdentifier, std::string _name)
 {
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Check if the identifier is valid
-	if (!NodeFromIdentifierExist(_classIdentifier))
-	{
-		// Invalid identifier
-		return;
-	}
-
 	// Create the dependency
-	dependencyManagerInstance->AddDependencyRelation(GetUniqueIdentifier(), _classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+	AddDependencyRelation(_classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
 
 	// Setup the param
 	FluxFunctionParam param;
@@ -86,6 +119,72 @@ void Flux::FluxFunction::AddReturnParam(FluxUniqueIdentifier _classIdentifier, s
 
 	// Add the return param
 	m_ReturnParams.push_back(param);
+
+	// Invalidate this node
+	Invalidate();
+}
+
+bool Flux::FluxFunction::RemoveReturnParam(uint32_t _paramInternalIdentifier)
+{
+	// Search the param
+	for (unsigned int i = 0; i < m_ReturnParams.size(); i++)
+	{
+		// Check the internal identifier
+		if (m_ReturnParams[i].internalIdentifier == _paramInternalIdentifier)
+		{
+			// Remove the dependency
+			RemoveDependencyRelation(m_ReturnParams[i].classIdentifier, FluxDependencyRelationType::SrcDependsOnDst);
+
+			// Remove the param
+			m_ReturnParams.erase(m_ReturnParams.begin() + i);
+
+			// Invalidate this node
+			Invalidate();
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Flux::FluxFunction::Verify()
+{
+	// For each local variable
+	for (auto& localVariable : m_LocalVariables)
+	{
+		// Check if this local variable exist
+		if (!NodeFromIdentifierExist(localVariable))
+		{
+			// Invalid node
+			return;
+		}
+	}
+
+	// For each input param
+	for (auto& inputParam : m_InputParams)
+	{
+		// Check if this input param exist
+		if (!NodeFromIdentifierExist(inputParam.classIdentifier))
+		{
+			// Invalid node
+			return;
+		}
+	}
+
+	// For each return param
+	for (auto& returnParam : m_ReturnParams)
+	{
+		// Check if this return param exist
+		if (!NodeFromIdentifierExist(returnParam.classIdentifier))
+		{
+			// Invalid node
+			return;
+		}
+	}
+
+	// Call the base method
+	Flux::FluxNode::Verify();
 }
 
 //////////

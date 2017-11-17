@@ -39,12 +39,13 @@ struct SomeData
 };
 
 #include "FluxUniqueIdentifier.h"
-#include "FluxProject.h"
+#include "Project\FluxProject.h"
 #include "Node\FluxClass.h"
 #include "Node\FluxFunction.h"
 #include "Node\FluxVariable.h"
+#include "Node\FluxRoot.h"
 
-#include "Node\FluxNodeArchiver.h"
+#include "Node\Archiver\FluxNodeArchiver.h"
 
 int main()
 {
@@ -54,10 +55,15 @@ int main()
 	Flux::FluxProject newproject;
 
 	// Try to load an old info
-	newproject.LoadProjectInfo("Neverland");
-
-	// Set the project data
-	newproject.SetExternalProjectName("Neverland");
+	if (!newproject.LoadProject("Neverland"))
+	{
+		// Try to create a new project
+		if (!newproject.CreateNewProject("Neverland"))
+		{
+			// Cant create this new project
+			return 0;
+		}
+	}
 
 	// CLASS //
 
@@ -66,6 +72,7 @@ int main()
 
 	// Set the class data
 	newClass.SetExternalName("DummyClass");
+	newproject.GetRootNode()->ConnectNode(newClass);
 
 	// VARIABLE //
 
@@ -77,37 +84,20 @@ int main()
 	newVariable.SetVariableType(newClass);
 
 	// Add a member variable to our class
-	newClass.AddMemberVariable(newVariable, Flux::FluxAccessModifier::Private);
+	uint32_t memberVariableIndex = newClass.AddMemberVariable(newVariable, Flux::FluxAccessModifier::Private);
 
-	// // //
+	// END //
+
+	newClass.RemoveMemberVariable(memberVariableIndex);
+	newVariable.Delete();
+
+	newproject.GetRootNode()->DisconnectNode(newClass);
+	newClass.Delete();
+
+	/////////
 
 	// Save the current project
-	newproject.SaveProjectInfo();
-
-	/*
-	std::ofstream os("out.cereal", std::ios::binary);
-	cereal::BinaryOutputArchive archive(os);
-
-	SomeData myData;
-	archive(myData);
-	*/
-
-	Flux::GlobalInstance<Flux::FluxUniqueIdentifier> identifier;
-	// int a = identifier->GetUniqueIdentifier();
-
-	newproject.SaveProjectData();
-
-	Flux::FluxUniqueIdentifier uniqueId = newproject.GenerateUniqueIdentifier(Flux::Type::Class);
-
-	//
-	Flux::FluxNodeArchiver<Flux::FluxClass> classArchiver("Class");
-
-	classArchiver.InsertNode(newClass);
-
-	nlohmann::json k;
-	k["NewObject"] = classArchiver;
-	
-	std::cout << k.dump(4) << std::endl;
+	newproject.SaveProject();
 
 	return 0;
 }

@@ -39,11 +39,14 @@ public:
 
 public:
 
-	// Return a object with the given identifier if it exist
-	Flux::FluxNode* GetNodeWithIdentifier(FluxUniqueIdentifier _identifier);
-
 	// Insert a new object
 	bool InsertNodeWithIdentifier(Flux::FluxNode* _node, FluxUniqueIdentifier _identifier);
+
+	// Remove an object
+	bool RemoveNodeWithIdentifier(FluxUniqueIdentifier _identifier);
+
+	// Return a object with the given identifier if it exist
+	Flux::FluxNode* GetNodeWithIdentifier(FluxUniqueIdentifier _identifier);
 
 	// Check if a node from the given info exist
 	bool NodeFromIdentifierExist(Flux::FluxUniqueIdentifier _identifier);
