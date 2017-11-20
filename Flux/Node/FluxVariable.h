@@ -53,7 +53,7 @@ public:
 	FluxUniqueIdentifier GetVariableType(){ return m_VariableType; }
 
 	// Verify this node
-	virtual void Verify();
+	virtual bool Verify();
 
 	// Delete this node
 	virtual void Delete();

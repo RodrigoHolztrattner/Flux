@@ -145,13 +145,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseClass.cpp" />
+    <ClCompile Include="Explorer\File\FluxAddonFile.cpp" />
+    <ClCompile Include="Explorer\File\FluxProjectFile.cpp" />
+    <ClCompile Include="Explorer\FluxExplorer.cpp" />
     <ClCompile Include="Flux.cpp" />
     <ClCompile Include="FluxUniqueIdentifier.cpp" />
     <ClCompile Include="Node\Archiver\FluxNodeArchiver.cpp" />
     <ClCompile Include="Node\Dependency\FluxDependency.cpp" />
     <ClCompile Include="Node\Dependency\FluxDependencyInterface.cpp" />
     <ClCompile Include="Node\Dependency\FluxDependencyManager.cpp" />
+    <ClCompile Include="Node\Dependency\FluxDependencyUtils.cpp" />
     <ClCompile Include="Node\FluxClass.cpp" />
+    <ClCompile Include="Node\FluxEnum.cpp" />
     <ClCompile Include="Node\FluxFunction.cpp" />
     <ClCompile Include="Node\FluxNode.cpp" />
     <ClCompile Include="Node\FluxRoot.cpp" />
@@ -159,19 +164,25 @@
     <ClCompile Include="Node\FunctionSource\FluxFunctionSource.cpp" />
     <ClCompile Include="Node\FunctionSource\FluxFunctionSourceNode.cpp" />
     <ClCompile Include="Node\Holder\FluxHolder.cpp" />
+    <ClCompile Include="Node\Holder\FluxHolderUtils.cpp" />
     <ClCompile Include="Project\FluxProject.cpp" />
     <ClCompile Include="Project\FluxProjectArchiver.cpp" />
     <ClCompile Include="Project\FluxProjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
+    <ClInclude Include="Explorer\File\FluxAddonFile.h" />
+    <ClInclude Include="Explorer\File\FluxProjectFile.h" />
+    <ClInclude Include="Explorer\FluxExplorer.h" />
     <ClInclude Include="FluxConfig.h" />
     <ClInclude Include="FluxUniqueIdentifier.h" />
     <ClInclude Include="Node\Archiver\FluxNodeArchiver.h" />
     <ClInclude Include="Node\Dependency\FluxDependency.h" />
     <ClInclude Include="Node\Dependency\FluxDependencyInterface.h" />
     <ClInclude Include="Node\Dependency\FluxDependencyManager.h" />
+    <ClInclude Include="Node\Dependency\FluxDependencyUtils.h" />
     <ClInclude Include="Node\FluxClass.h" />
+    <ClInclude Include="Node\FluxEnum.h" />
     <ClInclude Include="Node\FluxFunction.h" />
     <ClInclude Include="Node\FluxNode.h" />
     <ClInclude Include="Node\FluxRoot.h" />
@@ -179,6 +190,7 @@
     <ClInclude Include="Node\FunctionSource\FluxFunctionSource.h" />
     <ClInclude Include="Node\FunctionSource\FluxFunctionSourceNode.h" />
     <ClInclude Include="Node\Holder\FluxHolder.h" />
+    <ClInclude Include="Node\Holder\FluxHolderUtils.h" />
     <ClInclude Include="Project\FluxProject.h" />
     <ClInclude Include="Project\FluxProjectArchiver.h" />
     <ClInclude Include="Project\FluxProjectManager.h" />

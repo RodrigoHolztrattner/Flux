@@ -46,9 +46,16 @@ struct SomeData
 #include "Node\FluxRoot.h"
 
 #include "Node\Archiver\FluxNodeArchiver.h"
+#include "Explorer\File\FluxProjectFile.h"
 
 int main()
 {
+	Flux::FluxProjectFile projectFile;
+	projectFile.LoadProject("Explorer");
+
+
+
+
 	// PROJECT //
 
 	// Create a new project
@@ -88,11 +95,11 @@ int main()
 
 	// END //
 
-	newClass.RemoveMemberVariable(memberVariableIndex);
-	newVariable.Delete();
+	// newClass.RemoveMemberVariable(memberVariableIndex);
+	// newVariable.Delete();
 
-	newproject.GetRootNode()->DisconnectNode(newClass);
-	newClass.Delete();
+	// newproject.GetRootNode()->DisconnectNode(newClass);
+	// newClass.Delete();
 
 	/////////
 

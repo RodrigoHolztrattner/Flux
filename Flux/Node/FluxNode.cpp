@@ -7,11 +7,13 @@
 #include "Dependency\FluxDependencyManager.h"
 #include <cassert>
 
-Flux::FluxNode::FluxNode()
+Flux::FluxNode::FluxNode() : Flux::FluxDependencyUtils(this), Flux::FluxHolderUtils(this)
 {
+	FluxDependencyUtils::SetInternalPtr(this);
+	FluxHolderUtils::SetInternalPtr(this);
 }
 
-Flux::FluxNode::FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIdentifier)
+Flux::FluxNode::FluxNode(FluxProject* _project, FluxUniqueIdentifier _uniqueIdentifier) : Flux::FluxDependencyUtils(this), Flux::FluxHolderUtils(this)
 {
 	// Get the holder instance
 	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
@@ -48,85 +50,24 @@ void Flux::FluxNode::Delete()
 	assert(!m_ParentNode.Initialized());
 }
 
-bool Flux::FluxNode::NodeFromIdentifierExist(FluxUniqueIdentifier _identifier)
-{
-	// Get the holder instance
-	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
-
-	// Check if the identifier is valid
-	if (!_identifier.Initialized())
-	{
-		return false;
-	}
-
-	// Check
-	return fluxHolderInstance->NodeFromIdentifierExist(_identifier);
-}
-
-bool Flux::FluxNode::NodeFromIdentifierIsValidAndFromType(FluxUniqueIdentifier _identifier, Type _type, bool _verifyIfNecessary)
-{
-	// Get the holder instance
-	Flux::GlobalInstance<Flux::FluxHolder> fluxHolderInstance;
-
-	// Check if the identifier was initialized
-	if (!_identifier.Initialized())
-	{
-		return false;
-	}
-
-	// Check if the node is from the given type
-	if (_identifier.GetType() != _type)
-	{
-		return false;
-	}
-
-	// Check if the node exist
-	Flux::FluxNode* node = fluxHolderInstance->GetNodeWithIdentifier(_identifier);
-	if (node == nullptr)
-	{
-		return false;
-	}
-
-	// Check if the node is verified
-	if (!node->IsVerified())
-	{
-		// Check if we should verify
-		if (_verifyIfNecessary)
-		{
-			// Try to verify the node
-			node->Verify();
-
-			// Check again
-			if (!node->IsVerified())
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-void Flux::FluxNode::Verify()
+bool Flux::FluxNode::Verify()
 {
 	// Check if our identifier is valid
 	if (!m_UniqueIdentifier.Initialized())
 	{
-		return;
+		return false;
 	}
 
 	// Check if our parent identifier is valid
 	if (!m_ParentNode.Initialized())
 	{
-		return;
+		return false;
 	}
 
 	// Set verified to true
 	m_Verified = true;
+
+	return true;
 }
 
 ////////////
@@ -165,7 +106,7 @@ void Flux::FluxNode::SetParent(FluxUniqueIdentifier _parent)
 	dependencyManagerInstance->NotifyDependencies(GetUniqueIdentifier(), FluxDependencyNotifyType::SignatureChanged);
 
 	// Invalidate us
-	Invalidate();
+	NeedVerification();
 }
 
 void Flux::FluxNode::InvalidateParent()
@@ -186,69 +127,6 @@ void Flux::FluxNode::InvalidateParent()
 	// Invalidate the parent identifier
 	m_ParentNode.Invalidate();
 }
-
-////////////////
-// DEPENDENCY //
-////////////////
-
-void Flux::FluxNode::AddDependencyRelation(FluxUniqueIdentifier& _dst, FluxDependencyRelationType _relationType)
-{
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Check if the dst is valid
-	if (_dst.Initialized())
-	{
-		// Create the dependency
-		dependencyManagerInstance->AddDependencyRelation(*this, _dst, _relationType);
-	}
-}
-
-void Flux::FluxNode::RemoveDependencyRelation(FluxUniqueIdentifier& _dst, FluxDependencyRelationType _relationType)
-{
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Check if the dst is valid
-	if (_dst.Initialized())
-	{
-		// Remove the dependency
-		dependencyManagerInstance->RemoveDependencyRelation(*this, _dst, _relationType);
-	}
-}
-
-void Flux::FluxNode::SwapDependencyRelation(FluxUniqueIdentifier& _old, FluxUniqueIdentifier& _newDst, FluxDependencyRelationType _relationType)
-{
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Check if the old identifier is valid
-	if (_old.Initialized())
-	{
-		// Remove the dependency
-		dependencyManagerInstance->RemoveDependencyRelation(*this, _old, _relationType);
-
-		// Invalidate the old identifier
-		_old.Invalidate();
-	}
-
-	// Check if the dst is valid
-	if (_newDst.Initialized())
-	{
-		// Create the dependency
-		dependencyManagerInstance->AddDependencyRelation(*this, _newDst, _relationType);
-	}
-}
-
-void Flux::FluxNode::NotifyDependencies(Flux::FluxDependencyNotifyType _notifyType)
-{
-	// Get the dependency manager and the holder instances
-	Flux::GlobalInstance<Flux::FluxDependencyManager> dependencyManagerInstance;
-
-	// Notify
-	dependencyManagerInstance->NotifyDependencies(*this, _notifyType);
-}
-
 
 //////////
 // JSON //
@@ -275,4 +153,7 @@ void Flux::from_json(const nlohmann::json& _json, Flux::FluxNode& _node)
 	_node.m_Verified				= _json.at("Verified").get<bool>();
 	_node.m_MemberFromClass			= _json.at("IsMember").get<bool>();
 	_node.m_InternalIndexNumber		= _json.at("InternalIndexNumber").get<uint32_t>();
+
+	_node.FluxDependencyUtils::SetInternalPtr(&_node);
+	_node.FluxHolderUtils::SetInternalPtr(&_node);
 }

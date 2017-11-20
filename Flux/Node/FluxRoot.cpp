@@ -8,7 +8,7 @@
 
 const char* Flux::FluxRoot::NodeTypeName = "Root";
 
-Flux::FluxRoot::FluxRoot()
+Flux::FluxRoot::FluxRoot() : FluxNode()
 {
 	// Set the initial data
 	// ...
@@ -45,7 +45,7 @@ void Flux::FluxRoot::ConnectNode(Flux::FluxUniqueIdentifier _node)
 	m_ConnectedNodes.push_back(_node);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 }
 
 void Flux::FluxRoot::DisconnectNode(FluxUniqueIdentifier _node)
@@ -63,7 +63,7 @@ void Flux::FluxRoot::DisconnectNode(FluxUniqueIdentifier _node)
 			_node->InvalidateParent();
 
 			// Invalidate this node
-			Invalidate();
+			NeedVerification();
 
 			// Erase from the vector
 			m_ConnectedNodes.erase(m_ConnectedNodes.begin() + i);

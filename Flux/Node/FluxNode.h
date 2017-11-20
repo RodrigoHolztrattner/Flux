@@ -10,6 +10,8 @@
 #include "..\FluxUniqueIdentifier.h"
 #include "..\Project\FluxProject.h"
 #include "Dependency\FluxDependencyInterface.h"
+#include "Dependency\FluxDependencyUtils.h"
+#include "Holder\FluxHolderUtils.h"
 #include <vector>
 #include <string>
 #include <json.hpp>
@@ -34,17 +36,21 @@ class FluxRoot;
 class FluxClass;
 class FluxFunction;
 class FluxVariable;
+class FluxEnum;
+class FluxStructure;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: FluxNode
 ////////////////////////////////////////////////////////////////////////////////
-class FluxNode : public FluxDependencyInterface
+class FluxNode : public FluxDependencyInterface, public FluxDependencyUtils, public FluxHolderUtils
 {
 	// We have some friends
 	friend FluxRoot;
 	friend FluxClass;
 	friend FluxFunction;
 	friend FluxVariable;
+	friend FluxEnum;
+	friend FluxStructure;
 
 	// Json friend functions
 	friend void to_json(nlohmann::json& _json, const Flux::FluxNode& _node);
@@ -58,25 +64,19 @@ public:
 	// Set the external name
 	void SetExternalName(std::string _name) { m_ExternalName = _name; }
 
+	// Set that this node need to be verfied
+	void NeedVerification() { m_Verified = false; }
+
 	// Return our unique identifier
 	FluxUniqueIdentifier GetUniqueIdentifier() { return m_UniqueIdentifier; }
 
-	// Delete this node
-	virtual void Delete();
-
-	// Conversion to the unique identifier type
-	operator FluxUniqueIdentifier() const { return m_UniqueIdentifier; }
-
 public: // Validation
 
-	// Return if this node was verified
-	bool IsVerified() { return m_Verified; }
-
-	// Invalidade this node
-	void Invalidate() { m_Verified = false; }
-
 	// Verify this node
-	virtual void Verify();
+	virtual bool Verify();
+
+	// Delete this node
+	virtual void Delete();
 
 protected: // Parent
 
@@ -85,24 +85,13 @@ protected: // Parent
 	virtual void SetParent(FluxNode* _parent) { SetParent(*_parent); }
 	virtual void InvalidateParent();
 
-protected: // Dependency
-
-	// Add/remove/swap a dependency relation (those functions always verify if the src and dst are valid)
-	void AddDependencyRelation(FluxUniqueIdentifier& _dst, FluxDependencyRelationType _relationType);
-	void RemoveDependencyRelation(FluxUniqueIdentifier& _dst, FluxDependencyRelationType _relationType);
-	void SwapDependencyRelation(FluxUniqueIdentifier& _old, FluxUniqueIdentifier& _newDst, FluxDependencyRelationType _relationType);
-	void NotifyDependencies(Flux::FluxDependencyNotifyType _notifyType);
-
-protected: // Verification
-
-	// Check if a node from the given identifier exist
-	bool NodeFromIdentifierExist(FluxUniqueIdentifier _identifier);
-
-	// Check if the given identifier was initialized, if it is valid and if it is from the given type
-	bool NodeFromIdentifierIsValidAndFromType(FluxUniqueIdentifier _identifier, Type _type, bool _verifyIfNecessary = false);
-
 	// Return a unique internal index number
-	uint32_t GetUniqueInternalNumber(){ return m_InternalIndexNumber++; }
+	uint32_t GetUniqueInternalNumber() { return m_InternalIndexNumber++; }
+
+public:
+
+	// Conversion to the unique identifier type
+	operator FluxUniqueIdentifier() const { return m_UniqueIdentifier; }
 
 ///////////////
 // VARIABLES //

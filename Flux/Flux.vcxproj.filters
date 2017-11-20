@@ -49,6 +49,24 @@
     <ClCompile Include="Node\Archiver\FluxNodeArchiver.cpp">
       <Filter>Node\Archiver</Filter>
     </ClCompile>
+    <ClCompile Include="Node\Dependency\FluxDependencyUtils.cpp">
+      <Filter>Node\Dependency</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\Holder\FluxHolderUtils.cpp">
+      <Filter>Node\Holder</Filter>
+    </ClCompile>
+    <ClCompile Include="Node\FluxEnum.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Explorer\FluxExplorer.cpp">
+      <Filter>Explorer</Filter>
+    </ClCompile>
+    <ClCompile Include="Explorer\File\FluxAddonFile.cpp">
+      <Filter>Explorer\File</Filter>
+    </ClCompile>
+    <ClCompile Include="Explorer\File\FluxProjectFile.cpp">
+      <Filter>Explorer\File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseClass.h" />
@@ -99,6 +117,24 @@
     <ClInclude Include="Node\Archiver\FluxNodeArchiver.h">
       <Filter>Node\Archiver</Filter>
     </ClInclude>
+    <ClInclude Include="Node\Dependency\FluxDependencyUtils.h">
+      <Filter>Node\Dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\Holder\FluxHolderUtils.h">
+      <Filter>Node\Holder</Filter>
+    </ClInclude>
+    <ClInclude Include="Node\FluxEnum.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Explorer\FluxExplorer.h">
+      <Filter>Explorer</Filter>
+    </ClInclude>
+    <ClInclude Include="Explorer\File\FluxAddonFile.h">
+      <Filter>Explorer\File</Filter>
+    </ClInclude>
+    <ClInclude Include="Explorer\File\FluxProjectFile.h">
+      <Filter>Explorer\File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Node">
@@ -118,6 +154,15 @@
     </Filter>
     <Filter Include="Node\Archiver">
       <UniqueIdentifier>{ec3d23cd-0966-4bcd-b969-9577b28ee20e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Node\Base">
+      <UniqueIdentifier>{cd2458be-c3f6-4147-84fd-90db6a14326c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explorer">
+      <UniqueIdentifier>{8ffd8384-c866-4973-a255-ac9f9f0eba07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explorer\File">
+      <UniqueIdentifier>{e25c88bd-c02c-49c9-92db-5a3e764af009}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

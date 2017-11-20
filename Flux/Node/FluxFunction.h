@@ -76,7 +76,7 @@ public:
 	bool RemoveReturnParam(uint32_t _paramInternalIdentifier);
 
 	// Verify this node
-	virtual void Verify();
+	virtual bool Verify();
 
 ///////////////
 // VARIABLES //

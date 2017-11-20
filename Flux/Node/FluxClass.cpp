@@ -40,7 +40,7 @@ uint32_t Flux::FluxClass::AddMemberVariable(FluxUniqueIdentifier _identifier, Fl
 	m_MemberVariables.push_back(memberVariable);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 
 	return memberVariable.internalIdentifier;
 }
@@ -63,7 +63,7 @@ bool Flux::FluxClass::RemoveMemberVariable(uint32_t _memberInternalIdentifier)
 			m_MemberVariables.erase(m_MemberVariables.begin() + i);
 
 			// Invalidate this node
-			Invalidate();
+			NeedVerification();
 
 			return true;
 		}
@@ -90,7 +90,7 @@ uint32_t Flux::FluxClass::AddMemberFunction(FluxUniqueIdentifier _identifier, Fl
 	m_MemberFunctions.push_back(memberFunction);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 
 	return memberFunction.internalIdentifier;
 }
@@ -113,7 +113,7 @@ bool Flux::FluxClass::RemoveMemberFunction(uint32_t _memberInternalIdentifier)
 			m_MemberFunctions.erase(m_MemberFunctions.begin() + i);
 
 			// Invalidate this node
-			Invalidate();
+			NeedVerification();
 
 			return true;
 		}
@@ -122,8 +122,14 @@ bool Flux::FluxClass::RemoveMemberFunction(uint32_t _memberInternalIdentifier)
 	return false;
 }
 
-void Flux::FluxClass::Verify()
+bool Flux::FluxClass::Verify()
 {
+	// Check if we are already ok
+	if (m_Verified)
+	{
+		return true;
+	}
+
 	// For each member variable
 	for (auto& memberVariable : m_MemberVariables)
 	{
@@ -131,7 +137,7 @@ void Flux::FluxClass::Verify()
 		if (!NodeFromIdentifierExist(memberVariable.variableIdentifier))
 		{
 			// Invalid node
-			return;
+			return false;
 		}
 	}
 
@@ -142,12 +148,12 @@ void Flux::FluxClass::Verify()
 		if (!NodeFromIdentifierExist(memberFunction.functionIdentifier))
 		{
 			// Invalid node
-			return;
+			return false;
 		}
 	}
 
 	// Call the base method
-	Flux::FluxNode::Verify();
+	return Flux::FluxNode::Verify();
 }
 
 //////////

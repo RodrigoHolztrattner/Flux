@@ -43,7 +43,8 @@ enum class Type
 	Variable	= 4,
 	Function	= 5,
 	Project		= 6,
-	Root		= 7
+	Root		= 7,
+	Enum		= 8
 };
 
 //////////////////////

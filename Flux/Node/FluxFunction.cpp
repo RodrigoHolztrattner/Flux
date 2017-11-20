@@ -34,7 +34,7 @@ void Flux::FluxFunction::AddLocalVariable(FluxUniqueIdentifier _variableIdentifi
 	m_LocalVariables.push_back(_variableIdentifier);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 }
 
 bool Flux::FluxFunction::RemoveLocalVariable(FluxUniqueIdentifier _variableIdentifier)
@@ -55,7 +55,7 @@ bool Flux::FluxFunction::RemoveLocalVariable(FluxUniqueIdentifier _variableIdent
 			m_LocalVariables.erase(m_LocalVariables.begin() + i);
 
 			// Invalidate this node
-			Invalidate();
+			NeedVerification();
 
 			return true;
 		}
@@ -79,7 +79,7 @@ void Flux::FluxFunction::AddInputParam(FluxUniqueIdentifier _classIdentifier, st
 	m_InputParams.push_back(param);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 }
 
 bool Flux::FluxFunction::RemoveInputParam(uint32_t _paramInternalIdentifier)
@@ -97,7 +97,7 @@ bool Flux::FluxFunction::RemoveInputParam(uint32_t _paramInternalIdentifier)
 			m_InputParams.erase(m_InputParams.begin() + i);
 
 			// Invalidate this node
-			Invalidate();
+			NeedVerification();
 
 			return true;
 		}
@@ -121,7 +121,7 @@ void Flux::FluxFunction::AddReturnParam(FluxUniqueIdentifier _classIdentifier, s
 	m_ReturnParams.push_back(param);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 }
 
 bool Flux::FluxFunction::RemoveReturnParam(uint32_t _paramInternalIdentifier)
@@ -139,7 +139,7 @@ bool Flux::FluxFunction::RemoveReturnParam(uint32_t _paramInternalIdentifier)
 			m_ReturnParams.erase(m_ReturnParams.begin() + i);
 
 			// Invalidate this node
-			Invalidate();
+			NeedVerification();
 
 			return true;
 		}
@@ -148,8 +148,14 @@ bool Flux::FluxFunction::RemoveReturnParam(uint32_t _paramInternalIdentifier)
 	return false;
 }
 
-void Flux::FluxFunction::Verify()
+bool Flux::FluxFunction::Verify()
 {
+	// Check if we are already ok
+	if (m_Verified)
+	{
+		return true;
+	}
+
 	// For each local variable
 	for (auto& localVariable : m_LocalVariables)
 	{
@@ -157,34 +163,34 @@ void Flux::FluxFunction::Verify()
 		if (!NodeFromIdentifierExist(localVariable))
 		{
 			// Invalid node
-			return;
+			return false;
 		}
 	}
 
 	// For each input param
 	for (auto& inputParam : m_InputParams)
 	{
-		// Check if this input param exist
-		if (!NodeFromIdentifierExist(inputParam.classIdentifier))
+		// Check if this input param exist and if the type is valid
+		if (!NodeFromIdentifierExist(inputParam.classIdentifier) || !NodeFromIdentifierIsValidAsType(inputParam.classIdentifier))
 		{
 			// Invalid node
-			return;
+			return false;
 		}
 	}
 
 	// For each return param
 	for (auto& returnParam : m_ReturnParams)
 	{
-		// Check if this return param exist
-		if (!NodeFromIdentifierExist(returnParam.classIdentifier))
+		// Check if this return param exist and if the type is valid
+		if (!NodeFromIdentifierExist(returnParam.classIdentifier) || !NodeFromIdentifierIsValidAsType(returnParam.classIdentifier))
 		{
 			// Invalid node
-			return;
+			return false;
 		}
 	}
 
 	// Call the base method
-	Flux::FluxNode::Verify();
+	return Flux::FluxNode::Verify();
 }
 
 //////////

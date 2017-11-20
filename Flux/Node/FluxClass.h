@@ -97,7 +97,7 @@ public:
 	bool RemoveMemberFunction(uint32_t _memberInternalIdentifier);
 
 	// Verify this node
-	virtual void Verify();
+	virtual bool Verify();
 
 ///////////////
 // VARIABLES //

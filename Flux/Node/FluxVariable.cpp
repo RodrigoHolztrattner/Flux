@@ -33,22 +33,28 @@ void Flux::FluxVariable::SetVariableType(FluxUniqueIdentifier _classIdentifier)
 	NotifyDependencies(FluxDependencyNotifyType::SignatureChanged);
 
 	// Invalidate this node
-	Invalidate();
+	NeedVerification();
 }
 
-void Flux::FluxVariable::Verify()
+bool Flux::FluxVariable::Verify()
 {
-	// Check if our type identifier exist
-	if (!NodeFromIdentifierExist(m_VariableType))
+	// Check if we are already ok
+	if (m_Verified)
+	{
+		return true;
+	}
+
+	// Check if our type identifier exist and if it is a valid type
+	if (!NodeFromIdentifierExist(m_VariableType) || !NodeFromIdentifierIsValidAsType(m_VariableType))
 	{
 		// Invalid identifier
 		m_VariableType.Invalidate();
 
-		return;
+		return false;
 	}
 
 	// Call the base method
-	Flux::FluxNode::Verify();
+	return Flux::FluxNode::Verify();
 }
 
 void Flux::FluxVariable::Delete()
